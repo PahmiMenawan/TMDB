@@ -20,21 +20,22 @@ export class TMDBService {
     }
   }
 
-
-//   Fetch Movies & TV Shows
+  //   Fetch Movies & TV Shows
   static async getDiscoverMovies(page = 1) {
     return this.fetchData(
       `/discover/movie?page=${page}&sort_by=popularity.desc`
     );
   }
 
-  static async getTrendingDay(page = 1){
-   return this.fetchData(
-    `/trending/all/day?page=${page}`
-   ) 
+  static async getTrendingDay(page = 1) {
+    return this.fetchData(`/trending/all/day?page=${page}`);
   }
 
   static async getDiscoverTVShows(page = 1) {
     return this.fetchData(`/discover/tv?page=${page}&sort_by=popularity.desc`);
+  }
+
+  static async getItemDetails(type, id) {
+    return this.fetchData(`/${type}/${id}`);
   }
 }

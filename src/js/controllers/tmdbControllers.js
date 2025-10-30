@@ -23,4 +23,35 @@ export class TMDBController {
       TMDBView.renderError("Failed to load TV shows.");
     }
   }
+
+  static async loadTrendingDay(page = 1) {
+    try {
+      const data = await TMDBService.getTrendingDay(page);
+
+      const results = data.results
+        .map((item) => {
+          if (item.media_type === "movie") {
+            return new Movie(item);
+          } else if (item.media_type === "tv") {
+            return new TVShow(item);
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      TMDBView.renderTrending(results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load trending content.");
+    }
+  }
+
+  static async loadItemDetails(type, id) {
+    try {
+      const data = await TMDBService.getItemDetails(type, id);
+      TMDBView.renderDetails(data);
+    } catch (error) {
+      TMDBView.renderError("Failed to load item details.");
+    }
+  }
+
 }

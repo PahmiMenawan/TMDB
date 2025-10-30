@@ -14,6 +14,7 @@ export class TVShow {
     name,
     vote_average,
     vote_count,
+    media_type
   }) {
     this.adult = adult;
     this.backdrop = `https://image.tmdb.org/t/p/w500${backdrop_path}`;
@@ -29,5 +30,6 @@ export class TVShow {
     this.name = name;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
+    this.media_type = media_type
   }
 }
