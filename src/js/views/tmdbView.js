@@ -3,10 +3,9 @@ export class TMDBView {
     console.log("Movies:", movies);
   }
 
-  static renderTVShows(tvShows) {
-    console.log("TV Shows:", tvShows);
-  }
-
+  // static renderTVShows(tvShows) {
+  //   console.log("TV Shows:", tvShows);
+  // }
   static renderTrending(items) {
     const container = document.getElementById("trending-section");
     if (!container) return;
@@ -24,15 +23,34 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_average}</p>
+          <p>${date} | ⭐ ${item.vote_count}</p>
         </div>
       `;
       })
       .join("");
   }
 
+  static renderDetails(data) {
+    console.log(data);
+  }
+
   static renderError(message) {
     console.error("Error:", message);
+  }
+
+  static setActiveTrendingButton(mode) {
+    const todayBtn = document.getElementById("trending-today");
+    const weekBtn = document.getElementById("trending-week");
+
+    if (!todayBtn || !weekBtn) return;
+
+    if (mode === "day") {
+      todayBtn.classList.add("active");
+      weekBtn.classList.remove("active");
+    } else {
+      weekBtn.classList.add("active");
+      todayBtn.classList.remove("active");
+    }
   }
 }
 

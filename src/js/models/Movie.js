@@ -14,7 +14,6 @@ export class Movie {
     video,
     vote_average,
     vote_count,
-    media_type
   }) {
     this.adult = adult;
     this.backdrop = `https://image.tmdb.org/t/p/w500${backdrop_path}`;
@@ -30,6 +29,6 @@ export class Movie {
     this.video = video;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
-    this.media_type = media_type
+    this.media_type = "movie"
   }
 }

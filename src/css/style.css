@@ -5,8 +5,16 @@
     box-sizing: border-box;
 }
 
+:root{
+    --blue: rgb(15, 19, 59);
+}
+
 html{
     overflow-x: hidden;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .container{
@@ -42,6 +50,8 @@ a{
 .hero__search input{
     width: 100%;
     padding: 0.3rem;
+    border: none;
+    outline: none;
 }
 
 .navbar__nav .logo{
@@ -67,29 +77,53 @@ section{
 }
 
 .section__selector{
-    border: 2px solid red;
+    border: 1px solid var(--blue);
     border-radius: 100px;
     overflow: hidden;
 }
 
 .section__selector a{
     display: inline-block;
-    background-color: blue;    
     padding: 2px 5px;
     border-radius: 100px;
+    transition: background-color .3s;
+}
+
+.section__selector a.active {
+  background-color: var(--blue);
+  color: white;
+  border-radius: 12px;
+  padding: 4px 8px;
 }
 
 .section__items{
     display: flex;
     gap: 2rem;
     overflow-x: auto;
+    margin-top: 20px;
 }
 
 .section__movie-card{
     min-width: 15%;
+    cursor: pointer;
 }
 
 .section__movie-card img{
     max-width: 100%;
-    min-width: 200px;
+    transition: .3s;
+    min-width: 150px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.section__movie-card img:hover{
+    transform: translateY(-2px);
+}
+
+.section__movie-card h2{
+    font-size: 1rem;
+}
+
+/* TRENDING */
+.trending{
 }

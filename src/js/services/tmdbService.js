@@ -31,6 +31,15 @@ export class TMDBService {
     return this.fetchData(`/trending/all/day?page=${page}`);
   }
 
+  static async getTrendingWeek(page = 1) {
+    return this.fetchData(`/trending/all/week?page=${page}`);
+  }
+
+  static async getTrending(timeWindow = "day", page = 1) {
+  return this.fetchData(`/trending/all/${timeWindow}?page=${page}`);
+}
+
+
   static async getDiscoverTVShows(page = 1) {
     return this.fetchData(`/discover/tv?page=${page}&sort_by=popularity.desc`);
   }
