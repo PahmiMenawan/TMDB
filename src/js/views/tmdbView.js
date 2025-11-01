@@ -1,13 +1,79 @@
 export class TMDBView {
-  static renderMovies(movies) {
-    console.log("Movies:", movies);
-  }
-
-  // static renderTVShows(tvShows) {
-  //   console.log("TV Shows:", tvShows);
-  // }
+  // HOMEPAGE
+  // NOTES : Bisa ga si ini dijadiin 1 function aja
   static renderTrending(items) {
     const container = document.getElementById("trending-section");
+    if (!container) return;
+
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date || "Unknown";
+
+        return `
+        <div 
+          class="section__movie-card"
+          data-id="${item.id}"
+          data-type="${item.media_type}"
+        >
+          <img src="${item.poster}" alt="${title}">
+          <h2>${title}</h2>
+          <p>${date} | ⭐ ${item.vote_count}</p>
+        </div>
+      `;
+      })
+      .join("");
+  }
+  static renderPopular(items) {
+    const container = document.getElementById("popular-section");
+    if (!container) return;
+
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date || "Unknown";
+
+        return `
+        <div 
+          class="section__movie-card"
+          data-id="${item.id}"
+          data-type="${item.media_type}"
+        >
+          <img src="${item.poster}" alt="${title}">
+          <h2>${title}</h2>
+          <p>${date} | ⭐ ${item.vote_count}</p>
+        </div>
+      `;
+      })
+      .join("");
+  }
+
+  static renderTopRated(items) {
+    const container = document.getElementById("top-rated-section");
+    if (!container) return;
+
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date || "Unknown";
+
+        return `
+        <div 
+          class="section__movie-card"
+          data-id="${item.id}"
+          data-type="${item.media_type}"
+        >
+          <img src="${item.poster}" alt="${title}">
+          <h2>${title}</h2>
+          <p>${date} | ⭐ ${item.vote_count}</p>
+        </div>
+      `;
+      })
+      .join("");
+  }
+
+  static renderNowPlaying(items) {
+    const container = document.getElementById("now-playing-section");
     if (!container) return;
 
     container.innerHTML = items
@@ -38,6 +104,8 @@ export class TMDBView {
     console.error("Error:", message);
   }
 
+  // SECTION SELECTORS
+  // TRENDING SECTION
   static setActiveTrendingButton(mode) {
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");

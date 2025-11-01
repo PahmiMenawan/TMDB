@@ -21,29 +21,50 @@ export class TMDBService {
   }
 
   //   Fetch Movies & TV Shows
-  static async getDiscoverMovies(page = 1) {
-    return this.fetchData(
-      `/discover/movie?page=${page}&sort_by=popularity.desc`
-    );
-  }
+  // static async getDiscoverMovies(page = 1) {
+  //   return this.fetchData(
+  //     `/discover/movie?page=${page}&sort_by=popularity.desc`
+  //   );
+  // }
 
-  static async getTrendingDay(page = 1) {
-    return this.fetchData(`/trending/all/day?page=${page}`);
-  }
+  // static async getDiscoverTVShows(page = 1) {
+  //   return this.fetchData(`/discover/tv?page=${page}&sort_by=popularity.desc`);
+  // }
 
-  static async getTrendingWeek(page = 1) {
-    return this.fetchData(`/trending/all/week?page=${page}`);
-  }
+  // static async getTrendingDay(page = 1) {
+  //   return this.fetchData(`/trending/all/day?page=${page}`);
+  // }
 
+  // static async getTrendingWeek(page = 1) {
+  //   return this.fetchData(`/trending/all/week?page=${page}`);
+  // }
+
+  // HOMEPAGE
+  // TRENDING SECTION
   static async getTrending(timeWindow = "day", page = 1) {
-  return this.fetchData(`/trending/all/${timeWindow}?page=${page}`);
-}
-
-
-  static async getDiscoverTVShows(page = 1) {
-    return this.fetchData(`/discover/tv?page=${page}&sort_by=popularity.desc`);
+    return this.fetchData(`/trending/all/${timeWindow}?page=${page}`);
   }
 
+  // POPULAR SECTION
+  static async getPopular(type = "movie", page = 1) {
+    return this.fetchData(`/${type}/popular?page=${page}`);
+  }
+
+  // TOP RATED SECTION
+  static async getTopRated(type = "movie", page = 1) {
+    return this.fetchData(`/${type}/top_rated?page=${page}`);
+  }
+  // NOW PLAYING SECTION - MOVIES
+  static async getNowPlaying(page = 1) {
+    return this.fetchData(`/movie/now_playing?page=${page}`);
+  }
+
+  // NOW PLAYING SECTION - TV SERIES
+  static async getAiringToday(page = 1) {
+    return this.fetchData(`/tv/airing_today?page=${page}`);
+  }
+
+  // DETAILS
   static async getItemDetails(type, id) {
     return this.fetchData(`/${type}/${id}`);
   }

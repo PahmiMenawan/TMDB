@@ -2,6 +2,12 @@ import { TMDBController } from "./controllers/tmdbControllers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   TMDBController.loadTrending("day");
-  TMDBController.loadDiscoverMovies();
+  TMDBController.loadPopular("movie");
+  TMDBController.loadTopRated("movie");
+  TMDBController.loadNowPlaying();
   TMDBController.initEventListeners();
 });
+
+// document.getElementById("loginBtn").addEventListener("click", () => {
+//   AuthController.login();
+// });

@@ -4,69 +4,26 @@ import { TVShow } from "../models/TVShow.js";
 import { TMDBView } from "../views/tmdbView.js";
 
 export class TMDBController {
-  static async loadDiscoverMovies(page = 1) {
-    try {
-      const data = await TMDBService.getDiscoverMovies(page);
-      const movies = data.results.map((m) => new Movie(m));
-      TMDBView.renderMovies(movies);
-    } catch (error) {
-      TMDBView.renderError("Failed to load movies.");
-    }
-  }
+  // static async loadDiscoverMovies(page = 1) {
+  //   try {
+  //     const data = await TMDBService.getDiscoverMovies(page);
+  //     const movies = data.results.map((m) => new Movie(m));
+  //     TMDBView.renderMovies(movies);
+  //   } catch (error) {
+  //     TMDBView.renderError("Failed to load movies.");
+  //   }
+  // }
 
-  static async loadDiscoverTVShows(page = 1) {
-    try {
-      const data = await TMDBService.getDiscoverTVShows(page);
-      const tvShows = data.results.map((t) => new TVShow(t));
-      TMDBView.renderTVShows(tvShows);
-    } catch (error) {
-      TMDBView.renderError("Failed to load TV shows.");
-    }
-  }
-
+  // static async loadDiscoverTVShows(page = 1) {
+  //   try {
+  //     const data = await TMDBService.getDiscoverTVShows(page);
+  //     const tvShows = data.results.map((t) => new TVShow(t));
+  //     TMDBView.renderTVShows(tvShows);
+  //   } catch (error) {
+  //     TMDBView.renderError("Failed to load TV shows.");
+  //   }
+  // }
   // TRENDING
-  static async loadTrendingDay(page = 1) {
-    try {
-      const data = await TMDBService.getTrendingDay(page);
-
-      const results = data.results
-        .map((item) => {
-          if (item.media_type === "movie") {
-            return new Movie(item);
-          } else if (item.media_type === "tv") {
-            return new TVShow(item);
-          }
-          return null;
-        })
-        .filter(Boolean);
-
-      TMDBView.renderTrending(results);
-    } catch (error) {
-      TMDBView.renderError("Failed to load trending content.");
-    }
-  }
-
-  static async loadTrendingWeek(page = 1) {
-    try {
-      const data = await TMDBService.getTrendingWeek(page);
-
-      const results = data.results
-        .map((item) => {
-          if (item.media_type === "movie") {
-            return new Movie(item);
-          } else if (item.media_type === "tv") {
-            return new TVShow(item);
-          }
-          return null;
-        })
-        .filter(Boolean);
-
-      TMDBView.renderTrending(results);
-    } catch (error) {
-      TMDBView.renderError("Failed to load trending content.");
-    }
-  }
-
   static async loadTrending(timeWindow = "day", page = 1) {
     try {
       const data = await TMDBService.getTrending(timeWindow, page);
@@ -84,9 +41,88 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
+  
+  static async loadPopular(type = "movie", page = 1) {
+    try {
+      const data = await TMDBService.getPopular(type, page);
+
+      // const results = data.results
+      //   .map((item) => {
+      //     if (item.media_type === "movie") return new Movie(item);
+      //     if (item.media_type === "tv") return new TVShow(item);
+      //     return null;
+      //   })
+      //   .filter(Boolean);
+
+      TMDBView.renderPopular(data.results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load trending content.");
+    }
+  }
+
+  static async loadTopRated(type = "movie", page = 1) {
+    try {
+      const data = await TMDBService.getTopRated(type, page);
+
+      // const results = data.results
+      //   .map((item) => {
+      //     if (item.media_type === "movie") return new Movie(item);
+      //     if (item.media_type === "tv") return new TVShow(item);
+      //     return null;
+      //   })
+      //   .filter(Boolean);
+
+      TMDBView.renderTopRated(data.results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load trending content.");
+    }
+  }
+
+  static async loadNowPlaying(page = 1) {
+    try {
+      const data = await TMDBService.getNowPlaying(page);
+
+      // const results = data.results
+      //   .map((item) => {
+      //     if (item.media_type === "movie") return new Movie(item);
+      //     if (item.media_type === "tv") return new TVShow(item);
+      //     return null;
+      //   })
+      //   .filter(Boolean);
+
+      TMDBView.renderNowPlaying(data.results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load trending content.");
+    }
+  }
+
+  // static async loadAiringToday(page = 1) {
+  //   try {
+  //     const data = await TMDBService.getNowPlaying(page);
+
+  //     // const results = data.results
+  //     //   .map((item) => {
+  //     //     if (item.media_type === "movie") return new Movie(item);
+  //     //     if (item.media_type === "tv") return new TVShow(item);
+  //     //     return null;
+  //     //   })
+  //     //   .filter(Boolean);
+
+  //     TMDBView.renderNowPlaying(data.results);
+  //   } catch (error) {
+  //     TMDBView.renderError("Failed to load trending content.");
+  //   }
+  // }
+
+  static async loadHomePageContent(){
+    this.loadTrending("day");
+    this.loadPopular("movie");
+    this.loadTopRated("movie");
+    this.loadNowPlaying();
+  }
 
   static initEventListeners() {
-    // ITEM
+    // ITEM DETAILS
     const container = document.getElementById("trending-section");
     if (!container) return;
 
@@ -110,15 +146,13 @@ export class TMDBController {
       TMDBController.loadTrending("day");
       TMDBView.setActiveTrendingButton("day");
     });
-    
+
     weekBtn.addEventListener("click", (e) => {
       e.preventDefault();
       TMDBController.loadTrending("week");
       TMDBView.setActiveTrendingButton("week");
     });
   }
-
-
 
   static async loadItemDetails(type, id) {
     try {
