@@ -20,25 +20,6 @@ export class TMDBService {
     }
   }
 
-  //   Fetch Movies & TV Shows
-  // static async getDiscoverMovies(page = 1) {
-  //   return this.fetchData(
-  //     `/discover/movie?page=${page}&sort_by=popularity.desc`
-  //   );
-  // }
-
-  // static async getDiscoverTVShows(page = 1) {
-  //   return this.fetchData(`/discover/tv?page=${page}&sort_by=popularity.desc`);
-  // }
-
-  // static async getTrendingDay(page = 1) {
-  //   return this.fetchData(`/trending/all/day?page=${page}`);
-  // }
-
-  // static async getTrendingWeek(page = 1) {
-  //   return this.fetchData(`/trending/all/week?page=${page}`);
-  // }
-
   // HOMEPAGE
   // TRENDING SECTION
   static async getTrending(timeWindow = "day", page = 1) {

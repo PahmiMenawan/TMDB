@@ -4,25 +4,6 @@ import { TVShow } from "../models/TVShow.js";
 import { TMDBView } from "../views/tmdbView.js";
 
 export class TMDBController {
-  // static async loadDiscoverMovies(page = 1) {
-  //   try {
-  //     const data = await TMDBService.getDiscoverMovies(page);
-  //     const movies = data.results.map((m) => new Movie(m));
-  //     TMDBView.renderMovies(movies);
-  //   } catch (error) {
-  //     TMDBView.renderError("Failed to load movies.");
-  //   }
-  // }
-
-  // static async loadDiscoverTVShows(page = 1) {
-  //   try {
-  //     const data = await TMDBService.getDiscoverTVShows(page);
-  //     const tvShows = data.results.map((t) => new TVShow(t));
-  //     TMDBView.renderTVShows(tvShows);
-  //   } catch (error) {
-  //     TMDBView.renderError("Failed to load TV shows.");
-  //   }
-  // }
   // TRENDING
   static async loadTrending(timeWindow = "day", page = 1) {
     try {
@@ -41,101 +22,83 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-  
+  // POPULAR
   static async loadPopular(type = "movie", page = 1) {
     try {
       const data = await TMDBService.getPopular(type, page);
 
-      // const results = data.results
-      //   .map((item) => {
-      //     if (item.media_type === "movie") return new Movie(item);
-      //     if (item.media_type === "tv") return new TVShow(item);
-      //     return null;
-      //   })
-      //   .filter(Boolean);
+      const results = data.results
+        .map((item) => {
+          if (type === "movie") return new Movie(item);
+          if (type === "tv") return new TVShow(item);
+          return null;
+        })
+        .filter(Boolean);
 
-      TMDBView.renderPopular(data.results);
+      TMDBView.renderPopular(results);
     } catch (error) {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
+  // TOP RATED
   static async loadTopRated(type = "movie", page = 1) {
     try {
       const data = await TMDBService.getTopRated(type, page);
 
-      // const results = data.results
-      //   .map((item) => {
-      //     if (item.media_type === "movie") return new Movie(item);
-      //     if (item.media_type === "tv") return new TVShow(item);
-      //     return null;
-      //   })
-      //   .filter(Boolean);
+      const results = data.results
+        .map((item) => {
+          if (type === "movie") return new Movie(item);
+          if (type === "tv") return new TVShow(item);
+          return null;
+        })
+        .filter(Boolean);
 
-      TMDBView.renderTopRated(data.results);
+      TMDBView.renderTopRated(results);
     } catch (error) {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
+  // NOW PLAYING
   static async loadNowPlaying(page = 1) {
     try {
       const data = await TMDBService.getNowPlaying(page);
+      const movies = data.results.map((t) => new Movie(t));
 
-      // const results = data.results
-      //   .map((item) => {
-      //     if (item.media_type === "movie") return new Movie(item);
-      //     if (item.media_type === "tv") return new TVShow(item);
-      //     return null;
-      //   })
-      //   .filter(Boolean);
-
-      TMDBView.renderNowPlaying(data.results);
+      TMDBView.renderNowPlaying(movies);
     } catch (error) {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
 
-  // static async loadAiringToday(page = 1) {
-  //   try {
-  //     const data = await TMDBService.getNowPlaying(page);
+  static async loadAiringToday(page = 1) {
+    try {
+      const data = await TMDBService.getAiringToday(page);
+      const tv = data.results.map((t) => new TVShow(t));
 
-  //     // const results = data.results
-  //     //   .map((item) => {
-  //     //     if (item.media_type === "movie") return new Movie(item);
-  //     //     if (item.media_type === "tv") return new TVShow(item);
-  //     //     return null;
-  //     //   })
-  //     //   .filter(Boolean);
-
-  //     TMDBView.renderNowPlaying(data.results);
-  //   } catch (error) {
-  //     TMDBView.renderError("Failed to load trending content.");
-  //   }
-  // }
-
-  static async loadHomePageContent(){
-    this.loadTrending("day");
-    this.loadPopular("movie");
-    this.loadTopRated("movie");
-    this.loadNowPlaying();
+      TMDBView.renderNowPlaying(tv);
+    } catch (error) {
+      TMDBView.renderError("Failed to load trending content.");
+    }
   }
 
   static initEventListeners() {
     // ITEM DETAILS
-    const container = document.getElementById("trending-section");
+    const container = document.querySelectorAll(".section__items");
     if (!container) return;
 
-    container.addEventListener("click", (event) => {
-      const card = event.target.closest(".section__movie-card");
-      if (!card) return;
-      const id = card.dataset.id;
-      const type = card.dataset.type;
+    container.forEach((container) => {
+      container.addEventListener("click", (event) => {
+        const card = event.target.closest(".section__movie-card");
+        if (!card) return;
+        const id = card.dataset.id;
+        const type = card.dataset.type;
 
-      TMDBController.loadItemDetails(type, id);
+        TMDBController.loadItemDetails(type, id);
+      });
     });
 
-    // TRENDING BUTTONS
+    // SECTION SELECTORS
+    // TRENDING CHIPS
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");
 
@@ -151,6 +114,65 @@ export class TMDBController {
       e.preventDefault();
       TMDBController.loadTrending("week");
       TMDBView.setActiveTrendingButton("week");
+    });
+
+    // POPULAR CHIPS
+    const streamingBtn = document.getElementById("popular-movie");
+    const onTvBtn = document.getElementById("popular-tv");
+    streamingBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadPopular("movie");
+      TMDBView.setActivePopularButton("movie");
+    });
+
+    onTvBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadPopular("tv");
+      TMDBView.setActivePopularButton("tv");
+    });
+    // POPULAR CHIPS
+    const popularMovieBtn = document.getElementById("popular-movie");
+    const popularTvBtn = document.getElementById("popular-tv");
+    popularMovieBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadTopRated("movie");
+      TMDBView.setActiveTopRatedButton("movie");
+    });
+
+    popularTvBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadTopRated("tv");
+      TMDBView.setActiveTopRatedButton("tv");
+    });
+
+    // TOP RATED
+    const movieRatedBtn = document.getElementById("top-rated-movie");
+    const tvRatedBtn = document.getElementById("top-rated-tv");
+    movieRatedBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadTopRated("movie");
+      TMDBView.setActiveTopRatedButton("movie");
+    });
+
+    tvRatedBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadTopRated("tv");
+      TMDBView.setActiveTopRatedButton("tv");
+    });
+    
+    // NOW PLAYING
+    const nowPlayingBtn = document.getElementById("now-playing-movie");
+    const airTodayBtn = document.getElementById("now-playing-tv");
+    nowPlayingBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadNowPlaying();
+      TMDBView.setActiveNowPlayingButton("movie");
+    });
+
+    airTodayBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      TMDBController.loadAiringToday();
+      TMDBView.setActiveNowPlayingButton("tv");
     });
   }
 

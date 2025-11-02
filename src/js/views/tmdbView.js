@@ -25,6 +25,8 @@ export class TMDBView {
       .join("");
   }
   static renderPopular(items) {
+    console.log(items)
+
     const container = document.getElementById("popular-section");
     if (!container) return;
 
@@ -118,6 +120,49 @@ export class TMDBView {
     } else {
       weekBtn.classList.add("active");
       todayBtn.classList.remove("active");
+    }
+  }
+  static setActivePopularButton(mode) {
+    const streamingBtn = document.getElementById("popular-movie")
+    const onTvBtn = document.getElementById("popular-tv")
+
+    if (!streamingBtn || !onTvBtn) return;
+
+    if (mode === "movie") {
+      streamingBtn.classList.add("active");
+      onTvBtn.classList.remove("active");
+    } else {
+      onTvBtn.classList.add("active");
+      streamingBtn.classList.remove("active");
+    }
+  }
+  static setActiveTopRatedButton(mode) {
+    const movieBtn = document.getElementById("top-rated-movie");
+    const tvBtn = document.getElementById("top-rated-tv");
+
+    if (!movieBtn || !tvBtn) return;
+
+    if (mode === "movie") {
+      movieBtn.classList.add("active");
+      tvBtn.classList.remove("active");
+    } else {
+      tvBtn.classList.add("active");
+      movieBtn.classList.remove("active");
+    }
+  }
+
+  static setActiveNowPlayingButton(mode) {
+    const movieBtn = document.getElementById("now-playing-movie");
+    const tvBtn = document.getElementById("now-playing-tv");
+
+    if (!movieBtn || !tvBtn) return;
+
+    if (mode === "movie") {
+      movieBtn.classList.add("active");
+      tvBtn.classList.remove("active");
+    } else {
+      tvBtn.classList.add("active");
+      movieBtn.classList.remove("active");
     }
   }
 }
