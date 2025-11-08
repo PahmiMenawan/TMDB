@@ -1,9 +1,12 @@
 import { TMDBService } from "../services/tmdbService.js";
 import { Movie } from "../models/Movie.js";
 import { TVShow } from "../models/TVShow.js";
+import { Person } from "../models/Person.js";
 import { TMDBView } from "../views/tmdbView.js";
+import { AuthController } from "./authController.js"; // adjust path if needed
 
 export class TMDBController {
+  // ====================== HOMEPAGE SECTIONS ====================== //
   // TRENDING
   static async loadTrending(timeWindow = "day", page = 1) {
     try {
@@ -22,6 +25,7 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
+
   // POPULAR
   static async loadPopular(type = "movie", page = 1) {
     try {
@@ -40,6 +44,7 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
+
   // TOP RATED
   static async loadTopRated(type = "movie", page = 1) {
     try {
@@ -58,6 +63,7 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
+
   // NOW PLAYING
   static async loadNowPlaying(page = 1) {
     try {
@@ -69,7 +75,6 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
   static async loadAiringToday(page = 1) {
     try {
       const data = await TMDBService.getAiringToday(page);
@@ -81,8 +86,68 @@ export class TMDBController {
     }
   }
 
+  // ====================== DETAILS SECTIONS ====================== //
+  // ITEM DETAILS
+  static async loadDetailsPage() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const type = params.get("type");
+
+    if (!id || !type) {
+      TMDBView.renderError("Invalid URL parameters");
+      return;
+    }
+
+    try {
+      const data = await TMDBService.getItemDetails(type, id);
+      let result;
+      if (type === "movie") {
+        result = new Movie(data);
+      } else if (type === "tv") {
+        result = new TVShow(data);
+      } else {
+        throw new Error("Unknown media type");
+      }
+
+      TMDBView.renderDetails(result);
+      TMDBController.initWatchlistButton(type, id);
+    } catch (error) {
+      TMDBView.renderError("Failed to load item details.");
+    }
+  }
+
+  // ITEM'S CAST
+  static async loadItemCredits() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const type = params.get("type");
+
+    if (!id || !type) {
+      TMDBView.renderError("Invalid URL parameters");
+      return;
+    }
+
+    try {
+      const data = await TMDBService.getItemCredits(type, id);
+
+      const cast = data.cast.map((c) => new Person(c));
+
+      TMDBView.renderCredits(cast);
+    } catch (error) {
+      TMDBView.renderError("Failed to load credits.");
+    }
+  }
+  static initWatchlistButton(type, id) {
+    const button = document.querySelector(".details__info button");
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+      AuthController.addToWatchlist(type, id);
+    });
+  }
+
+  // EVENT LISTENER
   static initEventListeners() {
-    // ITEM DETAILS
     const container = document.querySelectorAll(".section__items");
     if (!container) return;
 
@@ -93,17 +158,41 @@ export class TMDBController {
         const id = card.dataset.id;
         const type = card.dataset.type;
 
-        TMDBController.loadItemDetails(type, id);
+        // TMDBController.loadItemDetails(type, id);
+        window.location.href = `details.html?type=${type}&id=${id}`;
       });
     });
+    const btn = document.getElementById("watchlist-btn");
+    if (!btn) return;
 
-    // SECTION SELECTORS
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const sessionId = localStorage.getItem("session_id");
+      if (!sessionId) {
+        AuthView.renderError("Please log in to view your watchlist.");
+        return;
+      }
+
+      // Redirect to the watchlist page
+      window.location.href = "watchlist.html";
+    });
+
+    // ====================== SECTION SELECTORS ====================== //
     // TRENDING CHIPS
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");
-
-    if (!todayBtn || !weekBtn) return;
-
+    // if (
+    //   !todayBtn ||
+    //   !weekBtn ||
+    //   !streamingBtn ||
+    //   !onTvBtn ||
+    //   !movieRatedBtn ||
+    //   !tvRatedBtn ||
+    //   !nowPlayingBtn ||
+    //   !airTodayBtn
+    // )
+    //   return;
     todayBtn.addEventListener("click", (e) => {
       e.preventDefault();
       TMDBController.loadTrending("day");
@@ -130,22 +219,8 @@ export class TMDBController {
       TMDBController.loadPopular("tv");
       TMDBView.setActivePopularButton("tv");
     });
-    // POPULAR CHIPS
-    const popularMovieBtn = document.getElementById("popular-movie");
-    const popularTvBtn = document.getElementById("popular-tv");
-    popularMovieBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTopRated("movie");
-      TMDBView.setActiveTopRatedButton("movie");
-    });
 
-    popularTvBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTopRated("tv");
-      TMDBView.setActiveTopRatedButton("tv");
-    });
-
-    // TOP RATED
+    // TOP RATED CHIPS
     const movieRatedBtn = document.getElementById("top-rated-movie");
     const tvRatedBtn = document.getElementById("top-rated-tv");
     movieRatedBtn.addEventListener("click", (e) => {
@@ -159,7 +234,7 @@ export class TMDBController {
       TMDBController.loadTopRated("tv");
       TMDBView.setActiveTopRatedButton("tv");
     });
-    
+
     // NOW PLAYING
     const nowPlayingBtn = document.getElementById("now-playing-movie");
     const airTodayBtn = document.getElementById("now-playing-tv");
@@ -174,22 +249,5 @@ export class TMDBController {
       TMDBController.loadAiringToday();
       TMDBView.setActiveNowPlayingButton("tv");
     });
-  }
-
-  static async loadItemDetails(type, id) {
-    try {
-      const data = await TMDBService.getItemDetails(type, id);
-      // let result;
-      // if (type === "movie") {
-      //   result = new Movie(data);
-      // } else if (type === "tv") {
-      //   result = new TVShow(data);
-      // } else {
-      //   throw new Error("Unknown media type");
-      // }
-      TMDBView.renderDetails(data);
-    } catch (error) {
-      TMDBView.renderError("Failed to load item details.");
-    }
   }
 }

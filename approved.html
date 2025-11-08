@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login Approved</title>
+  <script type="module">
+    import { AuthController } from "./src/controllers/authController.js";
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Get request_token from TMDB redirect
+      const params = new URLSearchParams(window.location.search);
+      const requestToken = params.get("request_token");
+
+      if (!requestToken) {
+        console.error("Missing request token.");
+        return;
+      }
+
+      // Create a session & save it
+      await AuthController.createSession(requestToken);
+
+      // Redirect user back to homepage or watchlist
+      window.location.href = "index.html";
+    });
+  </script>
+</head>
+<body>
+  <p>Finalizing login...</p>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { TMDBController } from "./controllers/tmdbControllers.js";
+import { AuthController } from "./controllers/authController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   TMDBController.loadTrending("day");
@@ -6,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   TMDBController.loadTopRated("movie");
   TMDBController.loadNowPlaying();
   TMDBController.initEventListeners();
+  // AuthController.login();
 });
 
 // document.getElementById("loginBtn").addEventListener("click", () => {
-//   AuthController.login();
 // });

@@ -1,8 +1,7 @@
 export class Movie {
   constructor({
-    adult,
     backdrop_path,
-    genre_ids,
+    genres,
     id,
     original_language,
     original_title,
@@ -15,9 +14,8 @@ export class Movie {
     vote_average,
     vote_count,
   }) {
-    this.adult = adult;
-    this.backdrop = `https://image.tmdb.org/t/p/w500${backdrop_path}`;
-    this.genre_ids = genre_ids;
+    this.backdrop = `https://image.tmdb.org/t/p/w1280${backdrop_path}`;
+    this.genres = genres;
     this.id = id;
     this.original_language = original_language;
     this.original_title = original_title;

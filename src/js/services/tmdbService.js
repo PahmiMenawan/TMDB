@@ -20,7 +20,7 @@ export class TMDBService {
     }
   }
 
-  // HOMEPAGE
+  // ====================== HOMEPAGE ====================== //
   // TRENDING SECTION
   static async getTrending(timeWindow = "day", page = 1) {
     return this.fetchData(`/trending/all/${timeWindow}?page=${page}`);
@@ -45,8 +45,14 @@ export class TMDBService {
     return this.fetchData(`/tv/airing_today?page=${page}`);
   }
 
-  // DETAILS
+  // ====================== DETAILS PAGE ====================== //
+  // ITEM DETAIL SECTION
   static async getItemDetails(type, id) {
     return this.fetchData(`/${type}/${id}`);
+  }
+  
+  // ITEM'S CAST SECTION
+  static async getItemCredits(type, id){
+    return this.fetchData(`/${type}/${id}/credits`)
   }
 }

@@ -1,8 +1,7 @@
 export class TVShow {
   constructor({
-    adult,
     backdrop_path,
-    genre_ids,
+    genres,
     id,
     origin_country,
     original_language,
@@ -15,9 +14,8 @@ export class TVShow {
     vote_average,
     vote_count,
   }) {
-    this.adult = adult;
-    this.backdrop = `https://image.tmdb.org/t/p/w500${backdrop_path}`;
-    this.genre_ids = genre_ids;
+    this.backdrop = `https://image.tmdb.org/t/p/w1280${backdrop_path}`;
+    this.genres = genres;
     this.id = id;
     this.origin_country = origin_country;
     this.original_language = original_language;

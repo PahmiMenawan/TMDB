@@ -1,11 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Details</title>
+    <link rel="stylesheet" href="src/css/style.css">
+    <style>
+        .details__hero {
+            background-size: auto;
+            background-repeat: no-repeat;
+            /* background-attachment: fixed; */
+        }
+
+        .details__items {
+            display: flex;
+            gap: 1rem;
+            /* width: 70%; */
+        }
+
+        .details__items img {
+            max-width: 200px;
+        }
+
+        .details__info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .cast-section {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            justify-content: center;
+        }
+
+        .person-card {
+            min-width: 160px;
+            max-width: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .person-card img {
+            max-width: 100%;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <header>
+        <div class="navbar">
+            <div class="container">
+                <div class="navbar__items">
+                    <nav class="navbar__nav">
+                        <a href="index.html" class="logo">TMDB</a>
+                        <a href="">Movies</a>
+                        <a href="">Tv Shows</a>
+                        <a href="">People</a>
+                        <a href="">More</a>
+                    </nav>
+                    <div class="navbar__profile">
+                        <select name="lang" id="">
+                            <option value="EN">EN</option>
+                            <option value="ID">ID</option>
+                        </select>
+                        <a href=""><i class="fa-solid fa-circle-user"></i></a>
+                        <a href=""><i class="fa-solid fa-search"></i></a>
+                    </div>
+                </div>
+                <div class="navbar__search">
+                    <!-- INPUT GROUP -->
+                    <input type="text" placeholder="Ini search">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- <p>Loading details...</p> -->
+        <section class="details__hero">
+            <div class="container">
+
+                <div id="details-container" class="details__items">
+                    <img src="https://placehold.co/200x300?text=Prikitiw&font=roboto" alt="Placeholder">
+                    <div class="details__info">
+                        <div class="details__title">
+                            <h1>Title</h1>
+                            <p>Genre 1 Genre 2</p>
+                            <p>Vote Count</p>
+                            <p>12 November 2023</p>
+                        </div>
+                        <div class="details__overview">
+                            <h2>Overview</h2>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem eaque, vitae voluptatem
+                                eos
+                                dolore veritatis. Fugit saepe consequatur dignissimos? Dolore, vel omnis natus aliquam
+                                eveniet
+                                odit eligendi eaque est repellendus? Illum nulla voluptatum beatae eligendi, corporis
+                                quo
+                                aut
+                                itaque ipsum, aperiam sequi nobis enim officiis tenetur molestiae saepe accusamus.
+                                Expedita!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+
+                <div id="cast-section" class="cast-section">
+
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                    <div class="cast__card">
+                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
+                        <div class="cast__info">
+                            <h3>Name</h3>
+                            <p>Character name</p>
+                            <p>episodes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script type="module" src="src/js/details.js"></script>
 </body>
+
 </html>

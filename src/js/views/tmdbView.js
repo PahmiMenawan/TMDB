@@ -1,5 +1,5 @@
 export class TMDBView {
-  // HOMEPAGE
+  // ====================== HOMEPAGE ====================== //
   // NOTES : Bisa ga si ini dijadiin 1 function aja
   static renderTrending(items) {
     const container = document.getElementById("trending-section");
@@ -25,8 +25,6 @@ export class TMDBView {
       .join("");
   }
   static renderPopular(items) {
-    console.log(items)
-
     const container = document.getElementById("popular-section");
     if (!container) return;
 
@@ -49,7 +47,6 @@ export class TMDBView {
       })
       .join("");
   }
-
   static renderTopRated(items) {
     const container = document.getElementById("top-rated-section");
     if (!container) return;
@@ -73,7 +70,6 @@ export class TMDBView {
       })
       .join("");
   }
-
   static renderNowPlaying(items) {
     const container = document.getElementById("now-playing-section");
     if (!container) return;
@@ -98,15 +94,7 @@ export class TMDBView {
       .join("");
   }
 
-  static renderDetails(data) {
-    console.log(data);
-  }
-
-  static renderError(message) {
-    console.error("Error:", message);
-  }
-
-  // SECTION SELECTORS
+  // ====================== HOMEPAGE - SECTION SELECTOR ====================== //
   // TRENDING SECTION
   static setActiveTrendingButton(mode) {
     const todayBtn = document.getElementById("trending-today");
@@ -122,9 +110,11 @@ export class TMDBView {
       todayBtn.classList.remove("active");
     }
   }
+
+  // POPULAR SECTION
   static setActivePopularButton(mode) {
-    const streamingBtn = document.getElementById("popular-movie")
-    const onTvBtn = document.getElementById("popular-tv")
+    const streamingBtn = document.getElementById("popular-movie");
+    const onTvBtn = document.getElementById("popular-tv");
 
     if (!streamingBtn || !onTvBtn) return;
 
@@ -136,6 +126,8 @@ export class TMDBView {
       streamingBtn.classList.remove("active");
     }
   }
+
+  // TOP RATED SECTION
   static setActiveTopRatedButton(mode) {
     const movieBtn = document.getElementById("top-rated-movie");
     const tvBtn = document.getElementById("top-rated-tv");
@@ -151,6 +143,7 @@ export class TMDBView {
     }
   }
 
+  // NOW PLAYING SECTION
   static setActiveNowPlayingButton(mode) {
     const movieBtn = document.getElementById("now-playing-movie");
     const tvBtn = document.getElementById("now-playing-tv");
@@ -165,6 +158,69 @@ export class TMDBView {
       movieBtn.classList.remove("active");
     }
   }
-}
 
-// DOM
+  // ====================== DETAILS ====================== //
+  static renderDetails(item) {
+    console.log(item);
+    const container = document.getElementById("details-container");
+    if (!container) return;
+    const title = item.title || item.name;
+    const release_date = item.release_date || item.first_air_date;
+    const genres = item.genres
+  ? item.genres.map((g) => g.name).join(", ")
+  : "Unknown";
+    container.innerHTML = `
+    <section class="details__hero">
+    <div class="container">
+    <div class="details__items">
+                    <img src="${item.poster}" alt="${title}">
+                    <div class="details__info">
+                        <div class="details__title">
+                            <h1>${title}</h1>
+                            <p>${genres}</p>
+                            <p>${item.vote_count}</p>
+                            <p>${release_date}</p>
+                            <button>Add to Watch List</button>
+                        </div>
+                        <div class="details__overview">
+                            <h2>Overview</h2>
+                            <p>${item.overview}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+  `;
+
+    const hero = container.querySelector(".details__hero");
+    hero.style.backgroundImage = `url(${item.backdrop})`;
+    hero.style.backgroundSize = "cover";
+    hero.style.backgroundPosition = "center";
+    hero.style.backgroundRepeat = "no-repeat";
+  }
+
+  static renderCredits(cast) {
+    const container = document.getElementById("cast-section");
+    if (!container) return;
+
+    container.innerHTML = `
+      ${cast
+        .map(
+          (person) => `
+          <div class="person-card">
+            <img src="${person.profile}" alt="${person.name}">
+            <h4>${person.name}</h4>
+            <p>${person.character || ""}</p>
+          </div>
+        `
+        )
+        .join("")}
+    </div>`;
+  }
+
+  static renderError(message) {
+    console.error("Error:", message);
+  }
+}
+// DOM MANIPULATIONS
