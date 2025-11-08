@@ -50,13 +50,49 @@ export class TMDBService {
   static async getItemDetails(type, id) {
     return this.fetchData(`/${type}/${id}`);
   }
-  
+
   // ITEM'S CAST SECTION
-  static async getItemCredits(type, id){
-    return this.fetchData(`/${type}/${id}/credits`)
+  static async getItemCredits(type, id) {
+    return this.fetchData(`/${type}/${id}/credits`);
   }
   // ITEM'S RECOMMENDATION SECTION
-  static async getItemRecommendation(type, id){
-    return this.fetchData(`/${type}/${id}/recommendations`)
+  static async getItemRecommendation(type, id) {
+    return this.fetchData(`/${type}/${id}/recommendations`);
+  }
+  // ====================== SEARCH / DISCOVER ====================== //
+  static async searchItems(query, type = "multi", page = 1) {
+    if (!query || query.trim() === "") {
+      throw new Error("Search query cannot be empty");
+    }
+
+    return this.fetchData(
+      `/search/${type}?query=${encodeURIComponent(query)}&page=${page}`
+    );
+  }
+  // ====================== FILTER ====================== //
+  static async discoverItems({
+    type = "movie",
+    sortBy = "popularity.desc",
+    genre = "",
+    releaseFrom = "",
+    releaseTo = "",
+    language = "",
+    page = 1,
+  }) {
+    let endpoint = `/discover/${type}?sort_by=${sortBy}&page=${page}`;
+
+    if (genre) endpoint += `&with_genres=${genre}`;
+    if (releaseFrom) endpoint += `&primary_release_date.gte=${releaseFrom}`;
+    if (releaseTo) endpoint += `&primary_release_date.lte=${releaseTo}`;
+    if (language) endpoint += `&with_original_language=${language}`;
+
+    return this.fetchData(endpoint);
+  }
+  static async getGenres(type = "movie") {
+    return this.fetchData(`/genre/${type}/list`);
+  }
+
+  static async getLanguages() {
+    return this.fetchData(`/configuration/languages`);
   }
 }

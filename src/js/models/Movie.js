@@ -21,12 +21,14 @@ export class Movie {
     this.original_title = original_title;
     this.overview = overview;
     this.popularity = popularity;
-    this.poster = `https://image.tmdb.org/t/p/w500${poster_path}`;
+    this.poster = poster_path
+      ? `https://image.tmdb.org/t/p/w500${poster_path}`
+      : "https://placehold.co/300x450?text=No+Image";
     this.release_date = release_date;
     this.title = title;
     this.tagline = tagline;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
-    this.media_type = "movie"
+    this.media_type = "movie";
   }
 }

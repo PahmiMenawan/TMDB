@@ -83,8 +83,8 @@
                 <div class="navbar__items">
                     <nav class="navbar__nav">
                         <a href="index.html" class="logo">TMDB</a>
-                        <a href="">Movies</a>
-                        <a href="">Tv Shows</a>
+                        <a href="discover.html?type=movie">Movies</a>
+                        <a href="discover.html?type=tv">Tv Shows</a>
                         <a href="">People</a>
                         <a href="">More</a>
                     </nav>
@@ -123,17 +123,18 @@
                     </select>
                 </div>
 
-                <div class="filter__group">
+                <!-- <div class="filter__group">
                     <h4>Where To Watch</h4>
                     <label><input type="checkbox" id="available_all" checked> All providers</label>
                     <label><input type="checkbox" id="available_streaming"> Streaming only</label>
-                </div>
+                </div> -->
 
                 <div class="filter__group">
-                    <h4>Show Me</h4>
-                    <label><input type="radio" name="seen" value="everything" checked> Everything</label>
-                    <label><input type="radio" name="seen" value="unseen"> Movies I Haven’t Seen</label>
-                    <label><input type="radio" name="seen" value="seen"> Movies I Have Seen</label>
+                    <h4>Languages</h4>
+                    <select id="languages-select">
+                        <option value="">All Languages</option>
+                        <!-- Populate dynamically -->
+                    </select>
                 </div>
 
                 <div class="filter__group">
@@ -157,16 +158,18 @@
 
             <!-- ===== RESULTS SECTION ===== -->
             <section class="discover__results">
-                <h2>Popular Movies</h2>
+                <h2 id="discoverHeader">Discover</h2>
 
                 <div class="discover__grid" id="discover-results">
-                    <!-- Dynamically inserted movie cards -->
+
                 </div>
             </section>
 
         </div>
     </main>
+    <script type="module" src="src/js/discover.js">
 
+    </script>
 </body>
 
 </html>

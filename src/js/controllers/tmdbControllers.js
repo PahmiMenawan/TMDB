@@ -168,9 +168,87 @@ export class TMDBController {
     }
   }
 
-  // EVENT LISTENER
+  // ====================== SEARCH / DISCOVER ====================== //
+  static async loadSearchResults() {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("query");
+    const type = params.get("type") || "multi";
+
+    if (!query) {
+      TMDBView.renderError("No search query provided.");
+      return;
+    }
+
+    try {
+      const data = await TMDBService.searchItems(query, type);
+      const results = data.results
+        .map((item) => {
+          if (item.media_type === "movie") return new Movie(item);
+          if (item.media_type === "tv") return new TVShow(item);
+          return null;
+        })
+        .filter(Boolean);
+
+      TMDBView.renderSearch(results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load search results.");
+    }
+  }
+
+  // ====================== FILTERED ====================== //
+
+  static async loadDiscoverResults(filters = {}) {
+    try {
+      const data = await TMDBService.discoverItems(filters);
+      const results = data.results
+        .map((item) => {
+          if (filters.type === "movie") return new Movie(item);
+          if (filters.type === "tv") return new TVShow(item);
+          return null;
+        })
+        .filter(Boolean);
+
+      TMDBView.renderSearch(results);
+    } catch (error) {
+      TMDBView.renderError("Failed to load discover results.");
+    }
+  }
+
+  static async populateGenresAndLanguages(type = "movie") {
+    try {
+      // GENRES
+      const genreData = await TMDBService.getGenres(type);
+      const genreSelect = document.getElementById("genre-select");
+      if (genreSelect && genreData.genres) {
+        genreSelect.innerHTML =
+          `<option value="">All Genres</option>` +
+          genreData.genres
+            .map((g) => `<option value="${g.id}">${g.name}</option>`)
+            .join("");
+      }
+
+      // LANGUAGES
+      const langData = await TMDBService.getLanguages();
+      const langSelect = document.getElementById("languages-select");
+      if (langSelect && langData) {
+        langSelect.innerHTML =
+          `<option value="">All Languages</option>` +
+          langData
+            .map(
+              (l) => `<option value="${l.iso_639_1}">${l.english_name}</option>`
+            )
+            .join("");
+      }
+    } catch (error) {
+      TMDBView.renderError("Failed to load genres or languages.");
+    }
+  }
+
+  // ====================== EVENT LISTENER ====================== //
   static initEventListeners() {
-    const container = document.querySelectorAll(".section__items");
+    const container = document.querySelectorAll(
+      ".section__items, #discover-results"
+    );
     if (!container) return;
 
     container.forEach((container) => {
@@ -179,71 +257,94 @@ export class TMDBController {
         if (!card) return;
         const id = card.dataset.id;
         const type = card.dataset.type;
-        
+
         window.location.href = `details.html?type=${type}&id=${id}`;
       });
     });
-  
-    // ====================== SECTION SELECTORS ====================== //
+
+    // ====================== EVENT LISTENER - SECTION SELECTORS ====================== //
     // TRENDING CHIPS
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");
-
-    todayBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTrending("day");
-      TMDBView.setActiveTrendingButton("day");
-    });
-
-    weekBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTrending("week");
-      TMDBView.setActiveTrendingButton("week");
-    });
+    if (todayBtn && weekBtn) {
+      todayBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadTrending("day");
+        TMDBView.setActiveTrendingButton("day");
+      });
+      weekBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadTrending("week");
+        TMDBView.setActiveTrendingButton("week");
+      });
+    }
 
     // POPULAR CHIPS
     const streamingBtn = document.getElementById("popular-movie");
     const onTvBtn = document.getElementById("popular-tv");
-    streamingBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadPopular("movie");
-      TMDBView.setActivePopularButton("movie");
-    });
+    if (streamingBtn && onTvBtn) {
+      streamingBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadPopular("movie");
+        TMDBView.setActivePopularButton("movie");
+      });
 
-    onTvBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadPopular("tv");
-      TMDBView.setActivePopularButton("tv");
-    });
+      onTvBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadPopular("tv");
+        TMDBView.setActivePopularButton("tv");
+      });
+    }
 
     // TOP RATED CHIPS
     const movieRatedBtn = document.getElementById("top-rated-movie");
     const tvRatedBtn = document.getElementById("top-rated-tv");
-    movieRatedBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTopRated("movie");
-      TMDBView.setActiveTopRatedButton("movie");
-    });
+    if (movieRatedBtn && tvRatedBtn) {
+      movieRatedBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadTopRated("movie");
+        TMDBView.setActiveTopRatedButton("movie");
+      });
 
-    tvRatedBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadTopRated("tv");
-      TMDBView.setActiveTopRatedButton("tv");
-    });
+      tvRatedBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadTopRated("tv");
+        TMDBView.setActiveTopRatedButton("tv");
+      });
+    }
 
     // NOW PLAYING
     const nowPlayingBtn = document.getElementById("now-playing-movie");
     const airTodayBtn = document.getElementById("now-playing-tv");
-    nowPlayingBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadNowPlaying();
-      TMDBView.setActiveNowPlayingButton("movie");
-    });
+    if (nowPlayingBtn && airTodayBtn) {
+      nowPlayingBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadNowPlaying();
+        TMDBView.setActiveNowPlayingButton("movie");
+      });
 
-    airTodayBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      TMDBController.loadAiringToday();
-      TMDBView.setActiveNowPlayingButton("tv");
+      airTodayBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadAiringToday();
+        TMDBView.setActiveNowPlayingButton("tv");
+      });
+    }
+    // ====================== SEARCH BARS ====================== //
+    const searchInputs = document.querySelectorAll(
+      ".navbar__search input, .hero__search input"
+    );
+
+    searchInputs.forEach((input) => {
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          const query = input.value.trim();
+          if (query) {
+            window.location.href = `discover.html?query=${encodeURIComponent(
+              query
+            )}&type=multi`;
+          }
+        }
+      });
     });
   }
 }

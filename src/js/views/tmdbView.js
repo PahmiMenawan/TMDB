@@ -249,8 +249,39 @@ export class TMDBView {
       .join("");
   }
 
+  // ====================== SEARCH / DISCOVER ====================== //
+static renderSearch(items) {
+  const container = document.getElementById("discover-results");
+  if (!container) return;
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `<p>No results found.</p>`;
+    return;
+  }
+
+  container.innerHTML = items
+    .map((item) => {
+      const title = item.title || item.name;
+      const date = item.release_date || item.first_air_date || "Unknown";
+      const rating = item.vote_average?.toFixed(1) || "?";
+
+      return `
+        <div 
+          class="section__movie-card"
+          data-id="${item.id}"
+          data-type="${item.media_type}"
+        >
+          <img src="${item.poster}" alt="${title}">
+          <h2>${title}</h2>
+          <p>${date} | ⭐ ${rating}</p>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+
   static renderError(message) {
     console.error("Error:", message);
   }
 }
-// DOM MANIPULATIONS
