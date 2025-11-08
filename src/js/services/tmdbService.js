@@ -3,15 +3,17 @@ const TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZDBiMzE4ZTk3MzY5YTQzNDIyOGY5ZjMyOTVmYWE0MCIsIm5iZiI6MTcyNTM2MTkzOC41NjA5OTk5LCJzdWIiOiI2NmQ2ZWYxMmFhY2M4ODE2MWZmMDFmMzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.F4rf8oju0lhtwb1XrWN3-jRTrzjwepwEoZbbzavXY9Q"; // replace later or import from config
 
 export class TMDBService {
-  static async fetchData(endpoint) {
+  static async fetchData(endpoint, options = {}) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: options.method || "GET",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
           accept: "application/json",
+          "Content-Type": "application/json",
         },
+        body: options.body || null,
       });
-
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       return await response.json();
     } catch (error) {
@@ -94,5 +96,46 @@ export class TMDBService {
 
   static async getLanguages() {
     return this.fetchData(`/configuration/languages`);
+  }
+  // ====================== AUTH / WATCHLIST ====================== //
+  static async getRequestToken() {
+    return this.fetchData(`/authentication/token/new`);
+  }
+
+  static async createSession(requestToken) {
+    return this.fetchData(`/authentication/session/new`, {
+      method: "POST",
+      body: JSON.stringify({ request_token: requestToken }),
+    });
+  }
+
+  static async getAccountDetails(sessionId) {
+    return this.fetchData(`/account?session_id=${sessionId}`);
+  }
+
+  static async addToWatchlist(
+    accountId,
+    sessionId,
+    mediaType,
+    mediaId,
+    watchlist = true
+  ) {
+    return this.fetchData(
+      `/account/${accountId}/watchlist?session_id=${sessionId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          media_type: mediaType,
+          media_id: mediaId,
+          watchlist: watchlist,
+        }),
+      }
+    );
+  }
+
+  static async getWatchlist(accountId, sessionId, type = "movies") {
+    return this.fetchData(
+      `/account/${accountId}/watchlist/${type}?session_id=${sessionId}`
+    );
   }
 }

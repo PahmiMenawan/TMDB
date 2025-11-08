@@ -33,6 +33,7 @@
             display: flex;
             gap: 2rem;
             overflow-x: auto;
+            padding: 2rem 0;
         }
 
         .person-card {
@@ -50,7 +51,6 @@
             display: flex;
             gap: 2rem;
             overflow-x: auto;
-            padding: 2rem 0;
         }
 
         .movie-card {
@@ -93,15 +93,14 @@
                         <a href="index.html" class="logo">TMDB</a>
                         <a href="discover.html?type=movie">Movies</a>
                         <a href="discover.html?type=tv">Tv Shows</a>
-                        <a href="">People</a>
-                        <a href="">More</a>
+                        <!-- <a href="">More</a> -->
                     </nav>
                     <div class="navbar__profile">
                         <select name="lang" id="">
                             <option value="EN">EN</option>
                             <option value="ID">ID</option>
                         </select>
-                        <a href=""><i class="fa-solid fa-circle-user"></i></a>
+                        <a id="watchlist-btn" href="watchlist.html"><i class="fa-solid fa-circle-user"></i></a>
                         <a href=""><i class="fa-solid fa-search"></i></a>
                     </div>
                 </div>

@@ -233,7 +233,7 @@ export class TMDBView {
         //   : "";
 
         return `
-        <div class="movie-card"
+        <div class="section__movie-card"
                   data-id="${item.id}"
           data-type="${item.media_type}">
           <img src="${item.poster}" alt="${title}">
@@ -279,6 +279,36 @@ static renderSearch(items) {
     })
     .join("");
 }
+static renderWatchlist(items) {
+  const container = document.getElementById("watchlist-section");
+  if (!container) return;
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `<p>No items in your watchlist yet.</p>`;
+    return;
+  }
+
+  container.innerHTML = items
+    .map((item) => {
+      const title = item.title || item.name;
+      const date = item.release_date || item.first_air_date || "Unknown";
+      const rating = item.vote_average?.toFixed(1) || "?";
+
+      return `
+        <div 
+          class="section__movie-card"
+          data-id="${item.id}"
+          data-type="${item.media_type || (item.title ? "movie" : "tv")}"
+        >
+          <img src="${item.poster}" alt="${title}">
+          <h2>${title}</h2>
+          <p>${date} | ⭐ ${rating}</p>
+        </div>
+      `;
+    })
+    .join("");
+}
+
 
 
   static renderError(message) {

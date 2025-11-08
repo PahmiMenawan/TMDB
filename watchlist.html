@@ -104,17 +104,16 @@
                 <div class="navbar__items">
                     <nav class="navbar__nav">
                         <a href="index.html" class="logo">TMDB</a>
-                        <a href="">Movies</a>
-                        <a href="">Tv Shows</a>
-                        <a href="">People</a>
-                        <a href="">More</a>
+                        <a href="discover.html?type=movie">Movies</a>
+                        <a href="discover.html?type=tv">Tv Shows</a>
+                        <!-- <a href="">More</a> -->
                     </nav>
                     <div class="navbar__profile">
                         <select name="lang" id="">
                             <option value="EN">EN</option>
                             <option value="ID">ID</option>
                         </select>
-                        <a href=""><i class="fa-solid fa-circle-user"></i></a>
+                        <a id="watchlist-btn" href="watchlist.html"><i class="fa-solid fa-circle-user"></i></a>
                         <a href=""><i class="fa-solid fa-search"></i></a>
                     </div>
                 </div>
@@ -166,7 +165,7 @@
 
         </div>
     </main>
-
+    <script type="module" src="src/js/watchlist.js"></script>
 </body>
 
 </html>

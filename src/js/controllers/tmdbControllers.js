@@ -113,7 +113,7 @@ export class TMDBController {
 
       console.log("Model created:", result);
       TMDBView.renderDetails(result);
-      // TMDBController.initWatchlistButton(type, id);
+      TMDBController.initWatchlistButton(type, id);
     } catch (error) {
       console.error("Details loading error:", error);
       TMDBView.renderError("Failed to load item details.");
@@ -247,7 +247,7 @@ export class TMDBController {
   // ====================== EVENT LISTENER ====================== //
   static initEventListeners() {
     const container = document.querySelectorAll(
-      ".section__items, #discover-results"
+      ".section__items, #discover-results, #recommend-section"
     );
     if (!container) return;
 
@@ -346,5 +346,29 @@ export class TMDBController {
         }
       });
     });
+  }
+  static async initWatchlistButton(type, id) {
+    const btn = document.querySelector(".details__title button");
+    if (!btn) return;
+
+    btn.addEventListener("click", async () => {
+      const { sessionId, accountId } = await this.authenticateUser();
+      if (!sessionId || !accountId) return;
+
+      await TMDBService.addToWatchlist(accountId, sessionId, type, id, true);
+      alert("Added to your Watchlist!");
+    });
+  }
+
+  static async authenticateUser() {
+    const sessionId = localStorage.getItem("session_id");
+    const accountId = localStorage.getItem("account_id");
+    if (sessionId && accountId) return { sessionId, accountId };
+
+    const tokenData = await TMDBService.getRequestToken();
+    const requestToken = tokenData.request_token;
+
+    alert("You will be redirected to TMDB to approve this app.");
+    window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/watchlist.html`;
   }
 }

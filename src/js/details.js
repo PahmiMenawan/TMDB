@@ -4,4 +4,5 @@ document.addEventListener("DOMContentLoaded", () => {
   TMDBController.loadDetailsPage();
   TMDBController.loadItemCredits();
   TMDBController.loadItemRecommendation();
+  TMDBController.initEventListeners();
 });
