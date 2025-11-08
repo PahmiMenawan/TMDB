@@ -10,7 +10,7 @@ export class Movie {
     poster_path,
     release_date,
     title,
-    video,
+    tagline,
     vote_average,
     vote_count,
   }) {
@@ -24,7 +24,7 @@ export class Movie {
     this.poster = `https://image.tmdb.org/t/p/w500${poster_path}`;
     this.release_date = release_date;
     this.title = title;
-    this.video = video;
+    this.tagline = tagline;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
     this.media_type = "movie"

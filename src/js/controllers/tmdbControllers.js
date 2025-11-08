@@ -3,7 +3,6 @@ import { Movie } from "../models/Movie.js";
 import { TVShow } from "../models/TVShow.js";
 import { Person } from "../models/Person.js";
 import { TMDBView } from "../views/tmdbView.js";
-import { AuthController } from "./authController.js"; // adjust path if needed
 
 export class TMDBController {
   // ====================== HOMEPAGE SECTIONS ====================== //
@@ -99,7 +98,10 @@ export class TMDBController {
     }
 
     try {
+      console.log("Fetching details for:", { type, id });
       const data = await TMDBService.getItemDetails(type, id);
+      console.log("Details fetched:", data);
+
       let result;
       if (type === "movie") {
         result = new Movie(data);
@@ -109,13 +111,14 @@ export class TMDBController {
         throw new Error("Unknown media type");
       }
 
+      console.log("Model created:", result);
       TMDBView.renderDetails(result);
-      TMDBController.initWatchlistButton(type, id);
+      // TMDBController.initWatchlistButton(type, id);
     } catch (error) {
+      console.error("Details loading error:", error);
       TMDBView.renderError("Failed to load item details.");
     }
   }
-
   // ITEM'S CAST
   static async loadItemCredits() {
     const params = new URLSearchParams(window.location.search);
@@ -137,13 +140,32 @@ export class TMDBController {
       TMDBView.renderError("Failed to load credits.");
     }
   }
-  static initWatchlistButton(type, id) {
-    const button = document.querySelector(".details__info button");
-    if (!button) return;
+  // ITEM'S RECOMENDTAION
+  static async loadItemRecommendation() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const type = params.get("type");
 
-    button.addEventListener("click", () => {
-      AuthController.addToWatchlist(type, id);
-    });
+    if (!id || !type) {
+      TMDBView.renderError("Invalid URL parameters");
+      return;
+    }
+
+    try {
+      const data = await TMDBService.getItemRecommendation(type, id);
+
+      const result = data.results
+        .map((item) => {
+          if (type === "movie") return new Movie(item);
+          if (type === "tv") return new TVShow(item);
+          return null;
+        })
+        .filter(Boolean);
+
+      TMDBView.renderRecommendation(result);
+    } catch (error) {
+      TMDBView.renderError("Failed to load recommend.");
+    }
   }
 
   // EVENT LISTENER
@@ -157,42 +179,16 @@ export class TMDBController {
         if (!card) return;
         const id = card.dataset.id;
         const type = card.dataset.type;
-
-        // TMDBController.loadItemDetails(type, id);
+        
         window.location.href = `details.html?type=${type}&id=${id}`;
       });
     });
-    const btn = document.getElementById("watchlist-btn");
-    if (!btn) return;
-
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const sessionId = localStorage.getItem("session_id");
-      if (!sessionId) {
-        AuthView.renderError("Please log in to view your watchlist.");
-        return;
-      }
-
-      // Redirect to the watchlist page
-      window.location.href = "watchlist.html";
-    });
-
+  
     // ====================== SECTION SELECTORS ====================== //
     // TRENDING CHIPS
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");
-    // if (
-    //   !todayBtn ||
-    //   !weekBtn ||
-    //   !streamingBtn ||
-    //   !onTvBtn ||
-    //   !movieRatedBtn ||
-    //   !tvRatedBtn ||
-    //   !nowPlayingBtn ||
-    //   !airTodayBtn
-    // )
-    //   return;
+
     todayBtn.addEventListener("click", (e) => {
       e.preventDefault();
       TMDBController.loadTrending("day");

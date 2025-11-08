@@ -18,7 +18,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_count}</p>
+          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -41,7 +41,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_count}</p>
+          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -64,7 +64,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_count}</p>
+          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -87,7 +87,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_count}</p>
+          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -167,8 +167,8 @@ export class TMDBView {
     const title = item.title || item.name;
     const release_date = item.release_date || item.first_air_date;
     const genres = item.genres
-  ? item.genres.map((g) => g.name).join(", ")
-  : "Unknown";
+      ? item.genres.map((g) => g.name).join(", ")
+      : "Unknown";
     container.innerHTML = `
     <section class="details__hero">
     <div class="container">
@@ -178,12 +178,13 @@ export class TMDBView {
                         <div class="details__title">
                             <h1>${title}</h1>
                             <p>${genres}</p>
-                            <p>${item.vote_count}</p>
+                            <p>${item.vote_average?.toFixed(1) || "?"}</p>
                             <p>${release_date}</p>
                             <button>Add to Watch List</button>
                         </div>
                         <div class="details__overview">
                             <h2>Overview</h2>
+                            
                             <p>${item.overview}
                             </p>
                         </div>
@@ -217,6 +218,35 @@ export class TMDBView {
         )
         .join("")}
     </div>`;
+  }
+  static renderRecommendation(items) {
+    const container = document.getElementById("recommend-section");
+    if (!container) return;
+
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date;
+        const releaseYear = date ? new Date(date).getFullYear() : "Unknown";
+        // const genres = item.genres
+        //   ? item.genres.map((g) => g.name).join(", ")
+        //   : "";
+
+        return `
+        <div class="movie-card"
+                  data-id="${item.id}"
+          data-type="${item.media_type}">
+          <img src="${item.poster}" alt="${title}">
+          <div class="movie-card__info">
+            <h3>${title}</h3>
+            <p>${releaseYear} • ⭐ ${
+          item.vote_average?.toFixed(1) || "?"
+        }/10</p>
+          </div>
+        </div>
+      `;
+      })
+      .join("");
   }
 
   static renderError(message) {

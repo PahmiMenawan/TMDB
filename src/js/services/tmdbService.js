@@ -55,4 +55,8 @@ export class TMDBService {
   static async getItemCredits(type, id){
     return this.fetchData(`/${type}/${id}/credits`)
   }
+  // ITEM'S RECOMMENDATION SECTION
+  static async getItemRecommendation(type, id){
+    return this.fetchData(`/${type}/${id}/recommendations`)
+  }
 }

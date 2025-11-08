@@ -4,17 +4,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Watchlist</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="src/css/style.css">
+    <style>
+        .profile {
+            background-color: #0b1729;
+            color: white;
+            padding: 2rem 0;
+            min-height: 100vh;
+        }
+
+        .profile__header {
+            margin-bottom: 2rem;
+        }
+
+        .profile__info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile__avatar i {
+            font-size: 3rem;
+            color: #01b4e4;
+        }
+
+        .profile__details h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile__details p {
+            color: #9bbbd4;
+            font-size: 0.95rem;
+        }
+
+        /* Watchlist Grid */
+        .section__items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .section__movie-card {
+            background: #132c46;
+            border-radius: 10px;
+            padding: 0.8rem;
+            text-align: center;
+            width: 180px;
+            transition: transform 0.3s ease;
+        }
+
+        .section__movie-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+        }
+
+        .section__movie-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .section__movie-card h2 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .section__movie-card p {
+            color: #9bbbd4;
+            font-size: 0.9rem;
+        }
+
+        /* Selector Tabs (Movies / TV) */
+        .section__selector {
+            border: 1px solid #01b4e4;
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .section__selector a {
+            display: inline-block;
+            padding: 4px 10px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .section__selector a.active {
+            background-color: #01b4e4;
+        }
+    </style>
 </head>
 
 <body>
-    <main>
-        <h1>My Watchlist</h1>
-        <section id="watchlist-section">Loading...</section>
+    <header>
+        <div class="navbar">
+            <div class="container">
+                <div class="navbar__items">
+                    <nav class="navbar__nav">
+                        <a href="index.html" class="logo">TMDB</a>
+                        <a href="">Movies</a>
+                        <a href="">Tv Shows</a>
+                        <a href="">People</a>
+                        <a href="">More</a>
+                    </nav>
+                    <div class="navbar__profile">
+                        <select name="lang" id="">
+                            <option value="EN">EN</option>
+                            <option value="ID">ID</option>
+                        </select>
+                        <a href=""><i class="fa-solid fa-circle-user"></i></a>
+                        <a href=""><i class="fa-solid fa-search"></i></a>
+                    </div>
+                </div>
+                <div class="navbar__search">
+                    <!-- INPUT GROUP -->
+                    <input type="text" placeholder="Ini search">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="profile">
+        <div class="container profile__container">
+
+            <!-- ===== PROFILE HEADER ===== -->
+            <section class="profile__header">
+                <div class="profile__info">
+                    <div class="profile__avatar">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div class="profile__details">
+                        <h1>My Watchlist</h1>
+                        <p>Movies and TV shows you've saved to watch later.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== WATCHLIST SECTION ===== -->
+            <section class="profile__watchlist">
+                <div class="section__header">
+                    <h2>Saved Titles</h2>
+                    <div class="section__selector">
+                        <a href="#" class="active" id="watchlist-movies">Movies</a>
+                        <a href="#" id="watchlist-tv">TV Shows</a>
+                    </div>
+                </div>
+
+                <div class="section__items" id="watchlist-section">
+                    <!-- Watchlist items will be dynamically inserted here -->
+                    <!-- Example Card -->
+
+                    <div class="section__movie-card">
+                        <img src="https://image.tmdb.org/t/p/w300/abc.jpg" alt="Movie title">
+                        <h2>Movie Title</h2>
+                        <p>⭐ 8.3 | 2023</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
     </main>
 
-    <script type="module" src="src/js/watchlist.js"></script>
 </body>
 
 </html>

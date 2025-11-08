@@ -33,7 +33,6 @@
             display: flex;
             gap: 2rem;
             overflow-x: auto;
-            justify-content: center;
         }
 
         .person-card {
@@ -45,6 +44,42 @@
 
         .person-card img {
             max-width: 100%;
+        }
+
+        .recommend-section {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 2rem 0;
+        }
+
+        .movie-card {
+            min-width: 200px;
+            max-width: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .movie-card__info {
+            padding: 1rem 0;
+        }
+
+        .movie-card__info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .movie-card__info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -110,73 +145,7 @@
         </section>
         <section>
             <div class="container">
-
                 <div id="cast-section" class="cast-section">
-
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
-                    <div class="cast__card">
-                        <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
-                        <div class="cast__info">
-                            <h3>Name</h3>
-                            <p>Character name</p>
-                            <p>episodes</p>
-                        </div>
-                    </div>
                     <div class="cast__card">
                         <img src="https://placehold.co/150x200?text=Prikitiw&font=roboto" alt="Placeholder">
                         <div class="cast__info">
@@ -203,7 +172,44 @@
                     </div>
                 </div>
             </div>
-
+        </section>
+        <section>
+            <div class="container">
+                <div id="recommend-section" class="recommend-section">
+                    <div class="movie-card">
+                        <img src="https://placehold.co/300x450?text=Movie+1&font=roboto" alt="Movie 1">
+                        <div class="movie-card__info">
+                            <h3>Movie Title 1</h3>
+                            <p>2023 • Action, Adventure</p>
+                            <p>⭐ 8.5/10</p>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="https://placehold.co/300x450?text=Movie+2&font=roboto" alt="Movie 2">
+                        <div class="movie-card__info">
+                            <h3>Movie Title 2</h3>
+                            <p>2023 • Drama, Thriller</p>
+                            <p>⭐ 7.9/10</p>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="https://placehold.co/300x450?text=Movie+3&font=roboto" alt="Movie 3">
+                        <div class="movie-card__info">
+                            <h3>Movie Title 3</h3>
+                            <p>2023 • Sci-Fi, Mystery</p>
+                            <p>⭐ 8.2/10</p>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="https://placehold.co/300x450?text=Movie+4&font=roboto" alt="Movie 4">
+                        <div class="movie-card__info">
+                            <h3>Movie Title 4</h3>
+                            <p>2023 • Comedy, Romance</p>
+                            <p>⭐ 7.5/10</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 

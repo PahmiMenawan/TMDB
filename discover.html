@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="src/css/style.css">
+    <style>
+        .discover {
+            padding: 2rem 0;
+            color: white;
+            background-color: #0b1729;
+        }
+
+        .discover__container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .discover__filters {
+            flex: 0 0 250px;
+            background: #102a43;
+            padding: 1.5rem;
+            border-radius: 8px;
+            height: fit-content;
+        }
+
+        .filter__group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter__group h4 {
+            margin-bottom: 0.5rem;
+            color: #90cea1;
+        }
+
+        .filter__group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .filter__group select,
+        .filter__group input[type="date"] {
+            width: 100%;
+            padding: 0.4rem;
+            border-radius: 4px;
+            border: none;
+            outline: none;
+            margin-bottom: 0.5rem;
+            background-color: #1b3a5c;
+            color: white;
+        }
+
+        .btn--primary {
+            background-color: #01b4e4;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .discover__results {
+            flex: 1;
+        }
+
+        .discover__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="container">
+                <div class="navbar__items">
+                    <nav class="navbar__nav">
+                        <a href="index.html" class="logo">TMDB</a>
+                        <a href="">Movies</a>
+                        <a href="">Tv Shows</a>
+                        <a href="">People</a>
+                        <a href="">More</a>
+                    </nav>
+                    <div class="navbar__profile">
+                        <select name="lang" id="">
+                            <option value="EN">EN</option>
+                            <option value="ID">ID</option>
+                        </select>
+                        <a id="watchlist-btn" href=""><i class="fa-solid fa-circle-user"></i></a>
+                        <a href=""><i class="fa-solid fa-search"></i></a>
+                    </div>
+                </div>
+                <div class="navbar__search">
+                    <!-- INPUT GROUP -->
+                    <input type="text" placeholder="Ini search">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="discover">
+        <div class="container discover__container">
+
+            <!-- ===== FILTER SIDEBAR ===== -->
+            <aside class="discover__filters">
+                <h2>Filters</h2>
+
+                <div class="filter__group">
+                    <h4>Sort</h4>
+                    <select id="sort-by">
+                        <option value="popularity.desc">Popularity ↓</option>
+                        <option value="popularity.asc">Popularity ↑</option>
+                        <option value="vote_average.desc">Rating ↓</option>
+                        <option value="vote_average.asc">Rating ↑</option>
+                        <option value="release_date.desc">Release Date ↓</option>
+                        <option value="release_date.asc">Release Date ↑</option>
+                    </select>
+                </div>
+
+                <div class="filter__group">
+                    <h4>Where To Watch</h4>
+                    <label><input type="checkbox" id="available_all" checked> All providers</label>
+                    <label><input type="checkbox" id="available_streaming"> Streaming only</label>
+                </div>
+
+                <div class="filter__group">
+                    <h4>Show Me</h4>
+                    <label><input type="radio" name="seen" value="everything" checked> Everything</label>
+                    <label><input type="radio" name="seen" value="unseen"> Movies I Haven’t Seen</label>
+                    <label><input type="radio" name="seen" value="seen"> Movies I Have Seen</label>
+                </div>
+
+                <div class="filter__group">
+                    <h4>Release Date</h4>
+                    <label>From</label>
+                    <input type="date" id="release-from">
+                    <label>To</label>
+                    <input type="date" id="release-to">
+                </div>
+
+                <div class="filter__group">
+                    <h4>Genres</h4>
+                    <select id="genre-select">
+                        <option value="">All Genres</option>
+                        <!-- Populate dynamically -->
+                    </select>
+                </div>
+
+                <button id="apply-filters" class="btn btn--primary">Apply Filters</button>
+            </aside>
+
+            <!-- ===== RESULTS SECTION ===== -->
+            <section class="discover__results">
+                <h2>Popular Movies</h2>
+
+                <div class="discover__grid" id="discover-results">
+                    <!-- Dynamically inserted movie cards -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+
+</html>
