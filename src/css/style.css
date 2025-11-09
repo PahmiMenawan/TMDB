@@ -20,6 +20,7 @@ body {
     background-color: #0b1729;
     color: var(--text-light);
     padding-top: 107px;
+    padding-bottom: 2rem;
 }
 
 a {
@@ -225,5 +226,12 @@ section {
     font-size: 1rem;
 }
 
-/* TRENDING */
-.trending {}
+/* FOOTER */
+.footer__container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer__bottom{
+    text-align: center;
+}

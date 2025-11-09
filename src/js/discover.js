@@ -9,12 +9,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const header = document.getElementById("discoverHeader");
   if(type == "movie"){
     header.innerHTML = "Discover Movies"
-  }else{
+  }else if(type == "tv"){
     header.innerHTML = "Discover Tv Shows"
+  }else{
+    header.innerHTML = "Discover"
   }
   await TMDBController.populateGenresAndLanguages(type);
 
   if (query) {
+    header.innerHTML = `Discover "${query}"`
     TMDBController.loadSearchResults();
   } else {
     TMDBController.loadDiscoverResults({ type });
@@ -22,8 +25,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.getElementById("apply-filters").addEventListener("click", () => {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type") || "movie";
   const filters = {
-    type: "movie",
+    type: type,
     sortBy: document.getElementById("sort-by").value,
     genre: document.getElementById("genre-select").value,
     releaseFrom: document.getElementById("release-from").value,

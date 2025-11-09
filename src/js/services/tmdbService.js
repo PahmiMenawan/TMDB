@@ -91,7 +91,8 @@ export class TMDBService {
     return this.fetchData(endpoint);
   }
   static async getGenres(type = "movie") {
-    return this.fetchData(`/genre/${type}/list`);
+    const validType = type === "tv" ? "tv" : "movie";
+    return this.fetchData(`/genre/${validType}/list`);
   }
 
   static async getLanguages() {
