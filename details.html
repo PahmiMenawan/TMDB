@@ -7,16 +7,14 @@
     <title>Details</title>
     <link rel="stylesheet" href="src/css/style.css">
     <style>
-        .details__hero {
+        /* .details__hero {
             background-size: auto;
             background-repeat: no-repeat;
-            /* background-attachment: fixed; */
         }
 
         .details__items {
             display: flex;
             gap: 1rem;
-            /* width: 70%; */
         }
 
         .details__items img {
@@ -100,7 +98,7 @@
         .details__title button:hover{
             background-color: var(--light-bg);
             transform: scale(1.1);
-        }
+        } */
     </style>
 </head>
 
@@ -108,12 +106,25 @@
     <header>
         <div class="navbar">
             <div class="container">
-                <div class="navbar__items">
+                <div class="navbar__items navbar--mobile">
+                    <nav class="navbar__nav">
+                        <a href="index.html" class="logo">TMDB</a>
+                    </nav>
+                    <div class="navbar__hamburger">
+                        <label for="hamburger">&#9776;</label>
+                        <input type="checkbox" name="hamburger" id="hamburger">
+                        <nav class="nav__mobile">
+                            <a href="watchlist.html">Watchlist</a>
+                            <a href="discover.html?type=movie">Movies</a>
+                            <a href="discover.html?type=tv">Tv Shows</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="navbar__items navbar--desktop">
                     <nav class="navbar__nav">
                         <a href="index.html" class="logo">TMDB</a>
                         <a href="discover.html?type=movie">Movies</a>
                         <a href="discover.html?type=tv">Tv Shows</a>
-                        <!-- <a href="">More</a> -->
                     </nav>
                     <div class="navbar__profile">
                         <select name="lang" id="">

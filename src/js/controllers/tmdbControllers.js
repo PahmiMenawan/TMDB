@@ -30,7 +30,6 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
   // POPULAR
   static async loadPopular(type = "movie", page = 1) {
     try {
@@ -49,7 +48,6 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
   // TOP RATED
   static async loadTopRated(type = "movie", page = 1) {
     try {
@@ -68,7 +66,6 @@ export class TMDBController {
       TMDBView.renderError("Failed to load trending content.");
     }
   }
-
   // NOW PLAYING
   static async loadNowPlaying(page = 1) {
     try {
@@ -211,7 +208,7 @@ export class TMDBController {
     }
   }
 
-  // ====================== FILTERED ====================== //
+  // FILTERS
   static async loadDiscoverResults(filters = {}, page = 1, append = false) {
     try {
       const data = await TMDBService.discoverItems({ ...filters, page });
@@ -291,25 +288,9 @@ export class TMDBController {
     TMDBView.renderWatchlist(results);
   }
 
-  // ====================== EVENT LISTENER ====================== //
-  static initEventListeners() {
-    const container = document.querySelectorAll(
-      ".section__items, #discover-results, #recommend-section"
-    );
-    if (!container) return;
-
-    container.forEach((container) => {
-      container.addEventListener("click", (event) => {
-        const card = event.target.closest(".section__movie-card");
-        if (!card) return;
-        const id = card.dataset.id;
-        const type = card.dataset.type;
-
-        window.location.href = `details.html?type=${type}&id=${id}`;
-      });
-    });
-
-    // ====================== EVENT LISTENER - SECTION SELECTORS ====================== //
+  // ====================== EVENT LISTENERS ====================== //
+  // Homepage chips
+  static initHomePageEvent() {
     // TRENDING CHIPS
     const todayBtn = document.getElementById("trending-today");
     const weekBtn = document.getElementById("trending-week");
@@ -376,7 +357,10 @@ export class TMDBController {
         TMDBView.setActiveNowPlayingButton("tv");
       });
     }
+  }
 
+  // Watchlist chips
+  static initWatchlistEvent() {
     // WATCHLIST CHIPS
     const watchListMovieBtn = document.getElementById("watchlist-movies");
     const watchListTvBtn = document.getElementById("watchlist-tv");
@@ -393,7 +377,10 @@ export class TMDBController {
         TMDBView.setActiveWatchListButton("tv");
       });
     }
+  }
 
+  // Searchbar
+  static initSearchBarEvent() {
     // ====================== SEARCH BARS ====================== //
     const searchInputs = document.querySelectorAll(
       ".navbar__search input, .hero__search input"
@@ -412,7 +399,23 @@ export class TMDBController {
       });
     });
   }
+  static initDetailsEvent() {
+    const container = document.querySelectorAll(
+      ".section__items, #discover-results, #recommend-section"
+    );
+    if (!container) return;
 
+    container.forEach((container) => {
+      container.addEventListener("click", (event) => {
+        const card = event.target.closest(".section__movie-card");
+        if (!card) return;
+        const id = card.dataset.id;
+        const type = card.dataset.type;
+
+        window.location.href = `details.html?type=${type}&id=${id}`;
+      });
+    });
+  }
   static async initWatchlistButton(type, id) {
     const btn = document.querySelector(".details__title button");
     if (!btn) return;
@@ -460,6 +463,7 @@ export class TMDBController {
     });
   }
 
+  // ====================== AUTH ====================== //
   static async authenticateUser() {
     const sessionId = localStorage.getItem("session_id");
     const accountId = localStorage.getItem("account_id");
@@ -471,5 +475,4 @@ export class TMDBController {
     alert("You will be redirected to TMDB to approve this app.");
     window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/watchlist.html`;
   }
-  // 
 }

@@ -5,5 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   TMDBController.loadPopular("movie");
   TMDBController.loadTopRated("movie");
   TMDBController.loadNowPlaying();
-  TMDBController.initEventListeners();
+  TMDBController.initDetailsEvent();
+  TMDBController.initHomePageEvent();
+  TMDBController.initSearchBarEvent();
 });

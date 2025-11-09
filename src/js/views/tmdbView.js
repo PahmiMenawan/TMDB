@@ -1,7 +1,6 @@
 import { TMDBController } from "../controllers/tmdbControllers.js";
 export class TMDBView {
   // ====================== HOMEPAGE ====================== //
-  // NOTES : Bisa ga si ini dijadiin 1 function aja
   static renderTrending(items) {
     const container = document.getElementById("trending-section");
     if (!container) return;
@@ -95,7 +94,7 @@ export class TMDBView {
       .join("");
   }
 
-  // ====================== HOMEPAGE - SECTION CHIPS ====================== //
+  // ====================== SECTION CHIPS ====================== //
   // TRENDING SECTION
   static setActiveTrendingButton(mode) {
     const todayBtn = document.getElementById("trending-today");
@@ -159,6 +158,7 @@ export class TMDBView {
       movieBtn.classList.remove("active");
     }
   }
+
   // WATCHLIST
   static setActiveWatchListButton(mode) {
     const movieBtn = document.getElementById("watchlist-movies");
@@ -220,8 +220,9 @@ export class TMDBView {
   url(${item.backdrop})
 `;
     hero.style.backgroundSize = "cover";
-    hero.style.backgroundPosition = "center";
+    hero.style.backgroundPosition = "top";
     hero.style.backgroundRepeat = "no-repeat";
+    hero.style.overflow = "auto";
   }
 
   static renderCredits(cast) {
@@ -242,6 +243,7 @@ export class TMDBView {
         .join("")}
     </div>`;
   }
+
   static renderRecommendation(items) {
     const container = document.getElementById("recommend-section");
     if (!container) return;
@@ -372,6 +374,7 @@ export class TMDBView {
       .join("");
   }
 
+  // ====================== ERROR CATCH ====================== //
   static renderError(message) {
     console.error("Error:", message);
   }

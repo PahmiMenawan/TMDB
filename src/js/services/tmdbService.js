@@ -37,6 +37,7 @@ export class TMDBService {
   static async getTopRated(type = "movie", page = 1) {
     return this.fetchData(`/${type}/top_rated?page=${page}`);
   }
+
   // NOW PLAYING SECTION - MOVIES
   static async getNowPlaying(page = 1) {
     return this.fetchData(`/movie/now_playing?page=${page}`);
@@ -57,10 +58,12 @@ export class TMDBService {
   static async getItemCredits(type, id) {
     return this.fetchData(`/${type}/${id}/credits`);
   }
+
   // ITEM'S RECOMMENDATION SECTION
   static async getItemRecommendation(type, id) {
     return this.fetchData(`/${type}/${id}/recommendations`);
   }
+
   // ====================== SEARCH / DISCOVER ====================== //
   static async searchItems(query, type = "multi", page = 1) {
     if (!query || query.trim() === "") {
@@ -71,6 +74,7 @@ export class TMDBService {
       `/search/${type}?query=${encodeURIComponent(query)}&page=${page}`
     );
   }
+
   // ====================== FILTER ====================== //
   static async discoverItems({
     type = "movie",
@@ -81,7 +85,8 @@ export class TMDBService {
     language = "",
     page = 1,
   }) {
-    let endpoint = `/discover/${type}?sort_by=${sortBy}&page=${page}`;
+    const validType = type === "tv" ? "tv" : "movie";
+    let endpoint = `/discover/${validType}?sort_by=${sortBy}&page=${page}`;
 
     if (genre) endpoint += `&with_genres=${genre}`;
     if (releaseFrom) endpoint += `&primary_release_date.gte=${releaseFrom}`;
@@ -94,11 +99,11 @@ export class TMDBService {
     const validType = type === "tv" ? "tv" : "movie";
     return this.fetchData(`/genre/${validType}/list`);
   }
-
   static async getLanguages() {
     return this.fetchData(`/configuration/languages`);
   }
-  // ====================== AUTH / WATCHLIST ====================== //
+
+  // ====================== AUTH ====================== //
   static async getRequestToken() {
     return this.fetchData(`/authentication/token/new`);
   }
@@ -133,13 +138,13 @@ export class TMDBService {
       }
     );
   }
-
+  // ====================== WATCHLIST ====================== //
   static async getWatchlist(accountId, sessionId, type = "movies") {
     return this.fetchData(
       `/account/${accountId}/watchlist/${type}?session_id=${sessionId}`
     );
   }
-  
+
   static async isInWatchlist(accountId, sessionId, mediaType, mediaId) {
     return this.fetchData(
       `/${mediaType}/${mediaId}/account_states?session_id=${sessionId}`
