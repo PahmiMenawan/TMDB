@@ -385,8 +385,18 @@ export class TMDBController {
     const searchInputs = document.querySelectorAll(
       ".navbar__search input, .hero__search input"
     );
+    const searchBtn = document.getElementById("searchBtn");
 
     searchInputs.forEach((input) => {
+      searchBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const query = input.value.trim();
+        if (query) {
+          window.location.href = `discover.html?query=${encodeURIComponent(
+            query
+          )}&type=multi`;
+        }
+      });
       input.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           const query = input.value.trim();
