@@ -94,7 +94,7 @@ export class TMDBView {
       .join("");
   }
 
-  // ====================== HOMEPAGE - SECTION SELECTOR ====================== //
+  // ====================== HOMEPAGE - SECTION CHIPS ====================== //
   // TRENDING SECTION
   static setActiveTrendingButton(mode) {
     const todayBtn = document.getElementById("trending-today");
@@ -147,6 +147,21 @@ export class TMDBView {
   static setActiveNowPlayingButton(mode) {
     const movieBtn = document.getElementById("now-playing-movie");
     const tvBtn = document.getElementById("now-playing-tv");
+
+    if (!movieBtn || !tvBtn) return;
+
+    if (mode === "movie") {
+      movieBtn.classList.add("active");
+      tvBtn.classList.remove("active");
+    } else {
+      tvBtn.classList.add("active");
+      movieBtn.classList.remove("active");
+    }
+  }
+  // WATCHLIST
+  static setActiveWatchListButton(mode) {
+    const movieBtn = document.getElementById("watchlist-movies");
+    const tvBtn = document.getElementById("watchlist-tv");
 
     if (!movieBtn || !tvBtn) return;
 
@@ -250,22 +265,22 @@ export class TMDBView {
   }
 
   // ====================== SEARCH / DISCOVER ====================== //
-static renderSearch(items) {
-  const container = document.getElementById("discover-results");
-  if (!container) return;
+  static renderSearch(items) {
+    const container = document.getElementById("discover-results");
+    if (!container) return;
 
-  if (!items || items.length === 0) {
-    container.innerHTML = `<p>No results found.</p>`;
-    return;
-  }
+    if (!items || items.length === 0) {
+      container.innerHTML = `<p>No results found.</p>`;
+      return;
+    }
 
-  container.innerHTML = items
-    .map((item) => {
-      const title = item.title || item.name;
-      const date = item.release_date || item.first_air_date || "Unknown";
-      const rating = item.vote_average?.toFixed(1) || "?";
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date || "Unknown";
+        const rating = item.vote_average?.toFixed(1) || "?";
 
-      return `
+        return `
         <div 
           class="section__movie-card"
           data-id="${item.id}"
@@ -276,25 +291,25 @@ static renderSearch(items) {
           <p>${date} | ⭐ ${rating}</p>
         </div>
       `;
-    })
-    .join("");
-}
-static renderWatchlist(items) {
-  const container = document.getElementById("watchlist-section");
-  if (!container) return;
-
-  if (!items || items.length === 0) {
-    container.innerHTML = `<p>No items in your watchlist yet.</p>`;
-    return;
+      })
+      .join("");
   }
+  static renderWatchlist(items) {
+    const container = document.getElementById("watchlist-section");
+    if (!container) return;
 
-  container.innerHTML = items
-    .map((item) => {
-      const title = item.title || item.name;
-      const date = item.release_date || item.first_air_date || "Unknown";
-      const rating = item.vote_average?.toFixed(1) || "?";
+    if (!items || items.length === 0) {
+      container.innerHTML = `<p>No items in your watchlist yet.</p>`;
+      return;
+    }
 
-      return `
+    container.innerHTML = items
+      .map((item) => {
+        const title = item.title || item.name;
+        const date = item.release_date || item.first_air_date || "Unknown";
+        const rating = item.vote_average?.toFixed(1) || "?";
+
+        return `
         <div 
           class="section__movie-card"
           data-id="${item.id}"
@@ -305,11 +320,9 @@ static renderWatchlist(items) {
           <p>${date} | ⭐ ${rating}</p>
         </div>
       `;
-    })
-    .join("");
-}
-
-
+      })
+      .join("");
+  }
 
   static renderError(message) {
     console.error("Error:", message);

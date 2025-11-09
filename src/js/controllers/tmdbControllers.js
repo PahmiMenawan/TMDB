@@ -243,6 +243,29 @@ export class TMDBController {
       TMDBView.renderError("Failed to load genres or languages.");
     }
   }
+  // ====================== WATCHLIST ====================== //
+  static async loadWatchlist(type) {
+    let sessionId = localStorage.getItem("session_id");
+    let accountId = localStorage.getItem("account_id");
+
+    const params = new URLSearchParams(window.location.search);
+    const approvedToken = params.get("request_token");
+
+    if (approvedToken && !sessionId) {
+      const sessionData = await TMDBService.createSession(approvedToken);
+      sessionId = sessionData.session_id;
+      localStorage.setItem("session_id", sessionId);
+
+      const accountData = await TMDBService.getAccountDetails(sessionId);
+      accountId = accountData.id;
+      localStorage.setItem("account_id", accountId);
+    }
+    const data = await TMDBService.getWatchlist(accountId, sessionId, type);
+    const results = data.results.map((item) =>
+      type === "movies" ? new Movie(item) : new TVShow(item)
+    );
+    TMDBView.renderWatchlist(results);
+  }
 
   // ====================== EVENT LISTENER ====================== //
   static initEventListeners() {
@@ -313,7 +336,7 @@ export class TMDBController {
       });
     }
 
-    // NOW PLAYING
+    // NOW PLAYING CHIPS
     const nowPlayingBtn = document.getElementById("now-playing-movie");
     const airTodayBtn = document.getElementById("now-playing-tv");
     if (nowPlayingBtn && airTodayBtn) {
@@ -329,6 +352,24 @@ export class TMDBController {
         TMDBView.setActiveNowPlayingButton("tv");
       });
     }
+
+    // WATCHLIST CHIPS
+    const watchListMovieBtn = document.getElementById("watchlist-movies");
+    const watchListTvBtn = document.getElementById("watchlist-tv");
+    if (watchListMovieBtn && watchListTvBtn) {
+      watchListMovieBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadWatchlist("movies");
+        TMDBView.setActiveWatchListButton("movie");
+      });
+
+      watchListTvBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        TMDBController.loadWatchlist("tv");
+        TMDBView.setActiveWatchListButton("tv");
+      });
+    }
+
     // ====================== SEARCH BARS ====================== //
     const searchInputs = document.querySelectorAll(
       ".navbar__search input, .hero__search input"
@@ -347,6 +388,7 @@ export class TMDBController {
       });
     });
   }
+
   static async initWatchlistButton(type, id) {
     const btn = document.querySelector(".details__title button");
     if (!btn) return;

@@ -1,5 +1,6 @@
 import { TMDBController } from "./controllers/tmdbControllers.js";
 document.addEventListener("DOMContentLoaded", async () => {
+
   TMDBController.initEventListeners();
 
   const params = new URLSearchParams(window.location.search);
