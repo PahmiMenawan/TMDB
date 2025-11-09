@@ -11,6 +11,9 @@ export class TVShow {
     poster_path,
     first_air_date,
     name,
+    tagline,
+    number_of_episodes,
+    number_of_seasons,
     vote_average,
     vote_count,
   }) {
@@ -27,6 +30,9 @@ export class TVShow {
       : "https://placehold.co/300x450?text=No+Image";
     this.first_air_date = first_air_date;
     this.name = name;
+    this.tagline = tagline;
+    this.episodes = number_of_episodes;
+    this.seasons = number_of_seasons;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
     this.media_type = "tv";

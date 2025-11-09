@@ -1,3 +1,4 @@
+import { TMDBController } from "../controllers/tmdbControllers.js";
 export class TMDBView {
   // ====================== HOMEPAGE ====================== //
   // NOTES : Bisa ga si ini dijadiin 1 function aja
@@ -184,6 +185,10 @@ export class TMDBView {
     const genres = item.genres
       ? item.genres.map((g) => g.name).join(", ")
       : "Unknown";
+    const runtime = item.runtime
+      ? `${Math.floor(item.runtime / 60)}h ${item.runtime % 60}m`
+      : "";
+    const episodes = `${item.seasons} Season, ${item.episodes} Episodes`;
     container.innerHTML = `
     <section class="details__hero">
     <div class="container">
@@ -192,14 +197,14 @@ export class TMDBView {
                     <div class="details__info">
                         <div class="details__title">
                             <h1>${title}</h1>
-                            <p>${genres}</p>
+                            <p>${genres} • ${runtime || episodes}</p>
                             <p>${item.vote_average?.toFixed(1) || "?"}</p>
                             <p>${release_date}</p>
-                            <button>Add to Watch List</button>
+                            <button>Loading...</button>
                         </div>
                         <div class="details__overview">
+                          <p class="tagline">${item.tagline}</p>
                             <h2>Overview</h2>
-                            
                             <p>${item.overview}
                             </p>
                         </div>
@@ -210,7 +215,10 @@ export class TMDBView {
   `;
 
     const hero = container.querySelector(".details__hero");
-    hero.style.backgroundImage = `url(${item.backdrop})`;
+    hero.style.backgroundImage = `
+  linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url(${item.backdrop})
+`;
     hero.style.backgroundSize = "cover";
     hero.style.backgroundPosition = "center";
     hero.style.backgroundRepeat = "no-repeat";
@@ -243,10 +251,6 @@ export class TMDBView {
         const title = item.title || item.name;
         const date = item.release_date || item.first_air_date;
         const releaseYear = date ? new Date(date).getFullYear() : "Unknown";
-        // const genres = item.genres
-        //   ? item.genres.map((g) => g.name).join(", ")
-        //   : "";
-
         return `
         <div class="section__movie-card"
                   data-id="${item.id}"
@@ -265,16 +269,16 @@ export class TMDBView {
   }
 
   // ====================== SEARCH / DISCOVER ====================== //
-  static renderSearch(items) {
+  static renderSearch(items, append = false) {
     const container = document.getElementById("discover-results");
     if (!container) return;
 
-    if (!items || items.length === 0) {
+    if ((!items || items.length === 0) && !append) {
       container.innerHTML = `<p>No results found.</p>`;
       return;
     }
 
-    container.innerHTML = items
+    const html = items
       .map((item) => {
         const title = item.title || item.name;
         const date = item.release_date || item.first_air_date || "Unknown";
@@ -293,7 +297,51 @@ export class TMDBView {
       `;
       })
       .join("");
+
+    if (append) {
+      container.insertAdjacentHTML("beforeend", html);
+    } else {
+      container.innerHTML = html;
+    }
   }
+
+  static renderLoadMoreButton(currentPage, totalPages) {
+    let btnContainer = document.getElementById("load-more-container");
+
+    if (!btnContainer) {
+      btnContainer = document.createElement("div");
+      btnContainer.id = "load-more-container";
+      btnContainer.style.textAlign = "center";
+      btnContainer.style.margin = "2rem 0";
+      document
+        .getElementById("discover-results")
+        .insertAdjacentElement("afterend", btnContainer);
+    }
+
+    if (currentPage < totalPages) {
+      btnContainer.innerHTML = `<button id="load-more-btn" class="btn btn--primary">Load More</button>`;
+    } else {
+      btnContainer.innerHTML = `<p style="color:#888;">No more results</p>`;
+    }
+
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener("click", async () => {
+        const nextPage = currentPage + 1;
+
+        if (TMDBController.currentMode === "search") {
+          await TMDBController.loadSearchResults(nextPage, true);
+        } else if (TMDBController.currentMode === "discover") {
+          await TMDBController.loadDiscoverResults(
+            TMDBController.currentFilters,
+            nextPage,
+            true
+          );
+        }
+      });
+    }
+  }
+
   static renderWatchlist(items) {
     const container = document.getElementById("watchlist-section");
     if (!container) return;

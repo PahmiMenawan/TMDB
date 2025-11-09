@@ -5,6 +5,12 @@ import { Person } from "../models/Person.js";
 import { TMDBView } from "../views/tmdbView.js";
 
 export class TMDBController {
+  static currentPage = 1;
+  static totalPages = 1;
+  static currentQuery = "";
+  static currentType = "movie";
+  static currentMode = "search";
+
   // ====================== HOMEPAGE SECTIONS ====================== //
   // TRENDING
   static async loadTrending(timeWindow = "day", page = 1) {
@@ -169,7 +175,7 @@ export class TMDBController {
   }
 
   // ====================== SEARCH / DISCOVER ====================== //
-  static async loadSearchResults() {
+  static async loadSearchResults(page = 1, append = false) {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("query");
     const type = params.get("type") || "multi";
@@ -180,7 +186,7 @@ export class TMDBController {
     }
 
     try {
-      const data = await TMDBService.searchItems(query, type);
+      const data = await TMDBService.searchItems(query, type, page);
       const results = data.results
         .map((item) => {
           if (item.media_type === "movie") return new Movie(item);
@@ -189,17 +195,26 @@ export class TMDBController {
         })
         .filter(Boolean);
 
-      TMDBView.renderSearch(results);
+      TMDBController.currentPage = data.page;
+      TMDBController.totalPages = data.total_pages;
+      TMDBController.currentQuery = query;
+      TMDBController.currentType = type;
+      TMDBController.currentMode = "search";
+
+      TMDBView.renderSearch(results, append);
+      TMDBView.renderLoadMoreButton(
+        TMDBController.currentPage,
+        TMDBController.totalPages
+      );
     } catch (error) {
       TMDBView.renderError("Failed to load search results.");
     }
   }
 
   // ====================== FILTERED ====================== //
-
-  static async loadDiscoverResults(filters = {}) {
+  static async loadDiscoverResults(filters = {}, page = 1, append = false) {
     try {
-      const data = await TMDBService.discoverItems(filters);
+      const data = await TMDBService.discoverItems({ ...filters, page });
       const results = data.results
         .map((item) => {
           if (filters.type === "movie") return new Movie(item);
@@ -208,7 +223,16 @@ export class TMDBController {
         })
         .filter(Boolean);
 
-      TMDBView.renderSearch(results);
+      TMDBController.currentPage = data.page;
+      TMDBController.totalPages = data.total_pages;
+      TMDBController.currentFilters = filters;
+      TMDBController.currentMode = "discover";
+
+      TMDBView.renderSearch(results, append);
+      TMDBView.renderLoadMoreButton(
+        TMDBController.currentPage,
+        TMDBController.totalPages
+      );
     } catch (error) {
       TMDBView.renderError("Failed to load discover results.");
     }
@@ -393,12 +417,46 @@ export class TMDBController {
     const btn = document.querySelector(".details__title button");
     if (!btn) return;
 
-    btn.addEventListener("click", async () => {
-      const { sessionId, accountId } = await this.authenticateUser();
-      if (!sessionId || !accountId) return;
+    const { sessionId, accountId } = await this.authenticateUser();
+    if (!sessionId || !accountId) return;
 
-      await TMDBService.addToWatchlist(accountId, sessionId, type, id, true);
-      alert("Added to your Watchlist!");
+    const state = await TMDBService.isInWatchlist(
+      accountId,
+      sessionId,
+      type,
+      id
+    );
+    let isInWatchlist = state.watchlist;
+
+    btn.textContent = isInWatchlist
+      ? "Remove from Watchlist"
+      : "Add to Watchlist";
+
+    btn.addEventListener("click", async () => {
+      try {
+        const newState = !isInWatchlist;
+        await TMDBService.addToWatchlist(
+          accountId,
+          sessionId,
+          type,
+          id,
+          newState
+        );
+        isInWatchlist = newState;
+
+        btn.textContent = isInWatchlist
+          ? "Remove from Watchlist"
+          : "Add to Watchlist";
+
+        alert(
+          isInWatchlist
+            ? "Added to your Watchlist!"
+            : "Removed from your Watchlist!"
+        );
+      } catch (error) {
+        alert("Something went wrong while updating your watchlist.");
+        console.error(error);
+      }
     });
   }
 
@@ -413,4 +471,5 @@ export class TMDBController {
     alert("You will be redirected to TMDB to approve this app.");
     window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/watchlist.html`;
   }
+  // 
 }

@@ -11,6 +11,7 @@ export class Movie {
     release_date,
     title,
     tagline,
+    runtime,
     vote_average,
     vote_count,
   }) {
@@ -27,6 +28,7 @@ export class Movie {
     this.release_date = release_date;
     this.title = title;
     this.tagline = tagline;
+    this.runtime = runtime;
     this.vote_average = vote_average;
     this.vote_count = vote_count;
     this.media_type = "movie";

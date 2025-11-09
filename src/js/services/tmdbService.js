@@ -139,4 +139,10 @@ export class TMDBService {
       `/account/${accountId}/watchlist/${type}?session_id=${sessionId}`
     );
   }
+  
+  static async isInWatchlist(accountId, sessionId, mediaType, mediaId) {
+    return this.fetchData(
+      `/${mediaType}/${mediaId}/account_states?session_id=${sessionId}`
+    );
+  }
 }
