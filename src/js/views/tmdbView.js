@@ -189,6 +189,7 @@ export class TMDBView {
       ? `${Math.floor(item.runtime / 60)}h ${item.runtime % 60}m`
       : "";
     const episodes = `${item.seasons} Season, ${item.episodes} Episodes`;
+    document.title = title;
     container.innerHTML = `
     <section class="details__hero">
     <div class="container">
@@ -267,7 +268,7 @@ export class TMDBView {
         </div>
       `;
       })
-      .join("");
+      .join("") || `We haven't found anymore recommendation for this item` ;
   }
 
   // ====================== SEARCH / DISCOVER ====================== //

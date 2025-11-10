@@ -114,6 +114,13 @@ export class TMDBService {
       body: JSON.stringify({ request_token: requestToken }),
     });
   }
+  
+  static async deleteSession(sessionId) {
+    return this.fetchData(`/authentication/session`, {
+      method: "DELETE",
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+  }
 
   static async getAccountDetails(sessionId) {
     return this.fetchData(`/account?session_id=${sessionId}`);

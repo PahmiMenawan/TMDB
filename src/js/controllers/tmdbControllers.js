@@ -89,6 +89,7 @@ export class TMDBController {
   }
 
   // ====================== DETAILS SECTIONS ====================== //
+
   // ITEM DETAILS
   static async loadDetailsPage() {
     const params = new URLSearchParams(window.location.search);
@@ -101,9 +102,9 @@ export class TMDBController {
     }
 
     try {
-      console.log("Fetching details for:", { type, id });
+      // console.log("Fetching details for:", { type, id });
       const data = await TMDBService.getItemDetails(type, id);
-      console.log("Details fetched:", data);
+      // console.log("Details fetched:", data);
 
       let result;
       if (type === "movie") {
@@ -172,6 +173,30 @@ export class TMDBController {
   }
 
   // ====================== SEARCH / DISCOVER ====================== //
+  static async loadDiscover() {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("query");
+    const type = params.get("type") || "movie";
+    const header = document.getElementById("discoverHeader");
+    if (type == "movie") {
+      header.innerHTML = "Discover Movies";
+      document.title = "Discover Movies";
+    } else if (type == "tv") {
+      header.innerHTML = "Discover Tv Shows";
+      document.title = "Discover Tv Shows";
+    } else {
+      header.innerHTML = "Discover";
+    }
+    await TMDBController.populateGenresAndLanguages(type);
+
+    if (query) {
+      header.innerHTML = `Discover "${query}"`;
+      document.title = `Discover "${query}"`;
+      TMDBController.loadSearchResults();
+    } else {
+      TMDBController.loadDiscoverResults({ type });
+    }
+  }
   static async loadSearchResults(page = 1, append = false) {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("query");
@@ -377,6 +402,13 @@ export class TMDBController {
         TMDBView.setActiveWatchListButton("tv");
       });
     }
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await TMDBController.logoutUser();
+      });
+    }
   }
 
   // Searchbar
@@ -473,6 +505,24 @@ export class TMDBController {
     });
   }
 
+  // Filter
+  static initApplyFilterEvent() {
+    document.getElementById("apply-filters").addEventListener("click", () => {
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get("type") || "movie";
+      const filters = {
+        type: type,
+        sortBy: document.getElementById("sort-by").value,
+        genre: document.getElementById("genre-select").value,
+        releaseFrom: document.getElementById("release-from").value,
+        releaseTo: document.getElementById("release-to").value,
+        language: document.getElementById("languages-select").value,
+      };
+
+      TMDBController.loadDiscoverResults(filters);
+    });
+  }
+
   // ====================== AUTH ====================== //
   static async authenticateUser() {
     const sessionId = localStorage.getItem("session_id");
@@ -484,5 +534,27 @@ export class TMDBController {
 
     alert("You will be redirected to TMDB to approve this app.");
     window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/watchlist.html`;
+  }
+
+  static async logoutUser() {
+    const sessionId = localStorage.getItem("session_id");
+
+    if (!sessionId) {
+      alert("You're not logged in.");
+      return;
+    }
+
+    try {
+      await TMDBService.deleteSession(sessionId);
+
+      localStorage.removeItem("session_id");
+      localStorage.removeItem("account_id");
+
+      alert("You’ve been logged out successfully.");
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("Failed to log out. Please try again.");
+    }
   }
 }
