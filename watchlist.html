@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Watchlist</title>
+    <link rel="shortcut icon" href="src/assets/film.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/style.css">
     <style>
         .profile {
@@ -45,6 +46,7 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             margin-top: 1rem;
+            justify-content: center;
         }
 
         .section__movie-card {
@@ -74,25 +76,6 @@
         .section__movie-card p {
             color: #9bbbd4;
             font-size: 0.9rem;
-        }
-
-        /* Selector Tabs (Movies / TV) */
-        .section__selector {
-            border: 1px solid #01b4e4;
-            border-radius: 100px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .section__selector a {
-            display: inline-block;
-            padding: 4px 10px;
-            color: white;
-            transition: 0.3s;
-        }
-
-        .section__selector a.active {
-            background-color: #01b4e4;
         }
     </style>
 </head>
@@ -163,11 +146,7 @@
                 </div>
 
                 <div class="section__items" id="watchlist-section">
-                    <div class="section__movie-card">
-                        <img src="https://image.tmdb.org/t/p/w300/abc.jpg" alt="Movie title">
-                        <h2>Movie Title</h2>
-                        <p>⭐ 8.3 | 2023</p>
-                    </div>
+                    Fetching your watchlist ...
 
                 </div>
             </section>

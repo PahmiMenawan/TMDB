@@ -10,6 +10,7 @@ export class TMDBController {
   static currentQuery = "";
   static currentType = "movie";
   static currentMode = "search";
+  static isLocked = false;
 
   // ====================== HOMEPAGE SECTIONS ====================== //
   // TRENDING
@@ -208,6 +209,7 @@ export class TMDBController {
     }
 
     try {
+      this.isLocked = true;
       const data = await TMDBService.searchItems(query, type, page);
       const results = data.results
         .map((item) => {
@@ -230,6 +232,8 @@ export class TMDBController {
       );
     } catch (error) {
       TMDBView.renderError("Failed to load search results.");
+    } finally {
+      this.isLocked = false;
     }
   }
 
@@ -322,11 +326,13 @@ export class TMDBController {
     if (todayBtn && weekBtn) {
       todayBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadTrending("day");
         TMDBView.setActiveTrendingButton("day");
       });
       weekBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadTrending("week");
         TMDBView.setActiveTrendingButton("week");
       });
@@ -338,12 +344,14 @@ export class TMDBController {
     if (streamingBtn && onTvBtn) {
       streamingBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadPopular("movie");
         TMDBView.setActivePopularButton("movie");
       });
 
       onTvBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadPopular("tv");
         TMDBView.setActivePopularButton("tv");
       });
@@ -392,12 +400,14 @@ export class TMDBController {
     if (watchListMovieBtn && watchListTvBtn) {
       watchListMovieBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadWatchlist("movies");
         TMDBView.setActiveWatchListButton("movie");
       });
 
       watchListTvBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         TMDBController.loadWatchlist("tv");
         TMDBView.setActiveWatchListButton("tv");
       });
@@ -406,6 +416,7 @@ export class TMDBController {
     if (logoutBtn) {
       logoutBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         await TMDBController.logoutUser();
       });
     }
@@ -422,6 +433,7 @@ export class TMDBController {
     searchInputs.forEach((input) => {
       searchBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        if (this.isLocked) return;
         const query = input.value.trim();
         if (query) {
           window.location.href = `discover.html?query=${encodeURIComponent(
@@ -431,6 +443,7 @@ export class TMDBController {
       });
       input.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
+          if (this.isLocked) return;
           const query = input.value.trim();
           if (query) {
             window.location.href = `discover.html?query=${encodeURIComponent(
@@ -449,6 +462,7 @@ export class TMDBController {
 
     container.forEach((container) => {
       container.addEventListener("click", (event) => {
+        if (this.isLocked) return;
         const card = event.target.closest(".section__movie-card");
         if (!card) return;
         const id = card.dataset.id;
@@ -478,6 +492,7 @@ export class TMDBController {
       : "Add to Watchlist";
 
     btn.addEventListener("click", async () => {
+      if (this.isLocked) return;
       try {
         const newState = !isInWatchlist;
         await TMDBService.addToWatchlist(
@@ -508,6 +523,7 @@ export class TMDBController {
   // Filter
   static initApplyFilterEvent() {
     document.getElementById("apply-filters").addEventListener("click", () => {
+      if (this.isLocked) return;
       const params = new URLSearchParams(window.location.search);
       const type = params.get("type") || "movie";
       const filters = {

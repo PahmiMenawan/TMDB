@@ -8,7 +8,13 @@ export class TMDBView {
     container.innerHTML = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
 
         return `
         <div 
@@ -18,7 +24,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
+          <p>${formatted} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -31,8 +37,13 @@ export class TMDBView {
     container.innerHTML = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
-
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
         return `
         <div 
           class="section__movie-card"
@@ -41,7 +52,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
+          <p>${formatted} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -54,7 +65,13 @@ export class TMDBView {
     container.innerHTML = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
 
         return `
         <div 
@@ -64,7 +81,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
+          <p>${formatted} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -77,7 +94,13 @@ export class TMDBView {
     container.innerHTML = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
 
         return `
         <div 
@@ -87,7 +110,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
+          <p>${formatted} | ⭐ ${item.vote_average?.toFixed(1) || "?"}</p>
         </div>
       `;
       })
@@ -181,7 +204,13 @@ export class TMDBView {
     const container = document.getElementById("details-container");
     if (!container) return;
     const title = item.title || item.name;
-    const release_date = item.release_date || item.first_air_date;
+    const dateItem = item.release_date || item.first_air_date || "Unknown";
+    const date = new Date(dateItem);
+    const formatted = date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
     const genres = item.genres
       ? item.genres.map((g) => g.name).join(", ")
       : "Unknown";
@@ -200,7 +229,7 @@ export class TMDBView {
                             <h1>${title}</h1>
                             <p>${genres} • ${runtime || episodes}</p>
                             <p>${item.vote_average?.toFixed(1) || "?"}</p>
-                            <p>${release_date}</p>
+                            <p>${formatted}</p>
                             <button>Loading...</button>
                         </div>
                         <div class="details__overview">
@@ -249,12 +278,13 @@ export class TMDBView {
     const container = document.getElementById("recommend-section");
     if (!container) return;
 
-    container.innerHTML = items
-      .map((item) => {
-        const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date;
-        const releaseYear = date ? new Date(date).getFullYear() : "Unknown";
-        return `
+    container.innerHTML =
+      items
+        .map((item) => {
+          const title = item.title || item.name;
+          const date = item.release_date || item.first_air_date;
+          const releaseYear = date ? new Date(date).getFullYear() : "Unknown";
+          return `
         <div class="section__movie-card"
                   data-id="${item.id}"
           data-type="${item.media_type}">
@@ -262,13 +292,13 @@ export class TMDBView {
           <div class="movie-card__info">
             <h3>${title}</h3>
             <p>${releaseYear} • ⭐ ${
-          item.vote_average?.toFixed(1) || "?"
-        }/10</p>
+            item.vote_average?.toFixed(1) || "?"
+          }/10</p>
           </div>
         </div>
       `;
-      })
-      .join("") || `We haven't found anymore recommendation for this item` ;
+        })
+        .join("") || `We haven't found anymore recommendation for this item`;
   }
 
   // ====================== SEARCH / DISCOVER ====================== //
@@ -284,7 +314,13 @@ export class TMDBView {
     const html = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
         const rating = item.vote_average?.toFixed(1) || "?";
 
         return `
@@ -295,7 +331,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${rating}</p>
+          <p>${formatted} | ⭐ ${rating}</p>
         </div>
       `;
       })
@@ -357,7 +393,13 @@ export class TMDBView {
     container.innerHTML = items
       .map((item) => {
         const title = item.title || item.name;
-        const date = item.release_date || item.first_air_date || "Unknown";
+        const dateItem = item.release_date || item.first_air_date || "Unknown";
+        const date = new Date(dateItem);
+        const formatted = date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
         const rating = item.vote_average?.toFixed(1) || "?";
 
         return `
@@ -368,7 +410,7 @@ export class TMDBView {
         >
           <img src="${item.poster}" alt="${title}">
           <h2>${title}</h2>
-          <p>${date} | ⭐ ${rating}</p>
+          <p>${formatted} | ⭐ ${rating}</p>
         </div>
       `;
       })
